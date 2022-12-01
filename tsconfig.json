@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ES2020"
+        ],
+        "module": "CommonJS",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "esModuleInterop": true
+    },
+    "files": [
+        "**/*.ts"
+    ]
+}
