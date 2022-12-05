@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 export function main() {
-    const inputFile = fs.readFileSync('input.txt', 'utf-8');
+    const inputFile = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8');
 
     let total = 0;
     
@@ -17,10 +17,10 @@ export function main() {
         const value = getValue(common);
         total += value;
 
-        console.log(`1: ${grp1}, 2: ${grp2}, 3: ${grp3}, ${common}/${value}`);
+        // console.log(`1: ${grp1}, 2: ${grp2}, 3: ${grp3}, ${common}/${value}`);
     }
 
-    console.log(total);
+    console.log(`Day 3, Part 2: ${total}`);
 }
 
 function getValue(items: string[]): number {

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 export function main() {
-    const inputFile = fs.readFileSync('input.txt', 'utf-8');
+    const inputFile = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8');
 
     let allNumbers: number[] = [];
     
@@ -14,14 +14,14 @@ export function main() {
 
         allNumbers.push(total);
     
-        console.log(`${idx}: ${total}`);
+        // console.log(`${idx}: ${total}`);
     });
 
     allNumbers.sort((a,b) => a - b)
 
     const top3 = allNumbers.slice(-3);
     
-    console.log(`Top 3: ${top3} => ${top3.reduce((total, val) => total + val)}`);
+    console.log(`Day 1, Part 2: ${top3.reduce((total, val) => total + val)}`);
 }
 
 main();

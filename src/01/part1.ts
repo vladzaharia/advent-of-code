@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 export function main() {
-    const inputFile = fs.readFileSync('input.txt', 'utf-8');
+    const inputFile = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8');
 
     let max = 0;
     
@@ -16,10 +16,10 @@ export function main() {
             max = total;
         }
     
-        console.log(`${idx}: ${total}`);
+        // console.log(`${idx}: ${total}`);
     });
     
-    console.log(`Largest calories: ${max}`);
+    console.log(`Day 1, Part 1: ${max}`);
 }
 
 main();

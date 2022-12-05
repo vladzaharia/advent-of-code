@@ -7,6 +7,11 @@
         "typescript": "^4.9.3"
     },
     "devDependencies": {
-        "@types/node": "^18.11.10"
+        "@types/async": "^3.2.16",
+        "@types/node": "^18.11.10",
+        "async": "^3.2.4"
+    },
+    "scripts": {
+        "start": "node --loader ts-node/esm.mjs src/index.ts"
     }
 }

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 export function main() {
-    const inputFile = fs.readFileSync('input.txt', 'utf-8');
+    const inputFile = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8');
 
     let total = 0;
     
@@ -10,10 +10,10 @@ export function main() {
         const val = calculateScore(line[0] as OpponentMove, line[2] as YourMove);
         total += val;
     
-        console.log(`${idx}: ${val}`);
+        // console.log(`${idx}: ${val}`);
     });
     
-    console.log(`Total: ${total}`);
+    console.log(`Day 2, Part 1: ${total}`);
 }
 
 //                   R  |  P  |  S

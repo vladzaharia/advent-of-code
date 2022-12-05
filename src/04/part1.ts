@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 export function main() {
-    const inputFile = fs.readFileSync('input.txt', 'utf-8');
+    const inputFile = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8');
 
     let total = 0;
     
@@ -17,7 +17,7 @@ export function main() {
         }
     });
 
-    console.log(total);
+    console.log(`Day 4, Part 1: ${total}`);
 }
 
 function getAssignmentList(assignment: string): number[] {
