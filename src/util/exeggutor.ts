@@ -68,6 +68,8 @@ export function getAdventFileFromPath(path: string, verbose = false): AdventFile
             day: parseInt(match[3], 10),
             part: parseInt(match[4], 10)
         }
+    } else {
+        throw new Error(`${path} is not a valid AoC path.`);
     }
 }
 
