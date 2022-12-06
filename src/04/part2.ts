@@ -17,7 +17,8 @@ export function main() {
         }
     });
 
-    console.log(`Day 4, Part 2: ${total}`);
+    // console.log(`Day 4, Part 2: ${total}`);
+    return total;
 }
 
 function getAssignmentList(assignment: string): number[] {
@@ -33,4 +34,4 @@ function getAssignmentList(assignment: string): number[] {
     return arr;
 }
 
-main();
+// main();

@@ -13,7 +13,8 @@ export function main() {
         // console.log(`${idx}: ${val}`);
     });
     
-    console.log(`Day 2, Part 2: ${total}`);
+    // console.log(`Day 2, Part 2: ${total}`);
+    return total;
 }
 
 //                   R  |  P  |  S
@@ -79,4 +80,4 @@ function calculateWinScore(oppMove: OpponentMove, yourMove: YourMove): number {
     return 6;
 }
 
-main();
+// main();

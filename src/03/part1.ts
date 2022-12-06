@@ -17,7 +17,8 @@ export function main() {
         // console.log(`1: ${cpt1}, 2: ${cpt2}, ${common}/${value}`);
     });
 
-    console.log(`Day 3, Part 1: ${total}`);
+    // console.log(`Day 3, Part 1: ${total}`);
+    return total;
 }
 
 function getValue(items: string[]): number {
@@ -30,4 +31,4 @@ function getValue(items: string[]): number {
     }
 }
 
-main();
+// main();

@@ -19,7 +19,8 @@ export function main() {
         // console.log(`${idx}: ${total}`);
     });
     
-    console.log(`Day 1, Part 1: ${max}`);
+    // console.log(`Day 1, Part 1: ${max}`);
+    return max;
 }
 
-main();
+// main();

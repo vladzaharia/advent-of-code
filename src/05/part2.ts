@@ -14,7 +14,8 @@ export function main() {
     const instructionLines = fileParts[1].split(/\r?\n/);
     runInstructions(stacks, instructionLines);
     
-    console.log(`Day 5, Part 2: ${stacks.map((s) => s[0]).join("")}`);
+    // console.log(`Day 5, Part 2: ${stacks.map((s) => s[0]).join("")}`);
+    return stacks.map((s) => s[0]).join("");
 }
 
 function parseStacks(lines: string[]): string[][] {
@@ -55,4 +56,4 @@ function runInstructions(stacks: string[][], lines: string[]) {
     });
 }
 
-main();
+// main();

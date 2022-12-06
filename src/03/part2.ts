@@ -20,7 +20,8 @@ export function main() {
         // console.log(`1: ${grp1}, 2: ${grp2}, 3: ${grp3}, ${common}/${value}`);
     }
 
-    console.log(`Day 3, Part 2: ${total}`);
+    // console.log(`Day 3, Part 2: ${total}`);
+    return total;
 }
 
 function getValue(items: string[]): number {
@@ -33,4 +34,4 @@ function getValue(items: string[]): number {
     }
 }
 
-main();
+// main();

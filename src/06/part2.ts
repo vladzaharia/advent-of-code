@@ -14,7 +14,7 @@ export function main() {
         }
 
         if (lastLetters.length === 14 && lastLetters.every((l, idx) => lastLetters.indexOf(l) === idx)) {
-            console.log(`Day 6, Part 2: ${i+1}`);
+            // console.log(`Day 6, Part 2: ${i+1}`);
             return i+1;
         }
     }
@@ -22,4 +22,4 @@ export function main() {
     return -1;
 }
 
-main();
+// main();
