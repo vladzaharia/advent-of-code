@@ -32,6 +32,11 @@ const baseOptions = (yargs: Argv) => {
         type: 'string',
         alias: 'p',
         conflicts: ['day', 'part']
+    }).option('year', {
+        describe: "The year of AoC to run",
+        type: 'number',
+        alias: 'y',
+        conflicts: ['path']
     }).option('day', {
         describe: "The day of AoC to run",
         type: 'number',
@@ -76,6 +81,10 @@ if (argv.path) {
     if (argv.part) {
         adventFiles = adventFiles.filter((f) => f.part === argv.part);
     }
+}
+
+if (adventFiles.length === 0) {
+    console.error("\x1b[1m\x1b[31m[X] No files found to execute!\x1b[0m");
 }
 
 if (argv['_'][0] === "bootstrap") {
