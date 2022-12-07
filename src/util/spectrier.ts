@@ -25,17 +25,20 @@ export async function executeTestsForAdventFile(script: AdventFile, verbose = fa
     }
 }
 
-export function getTestForAdventFile(script: AdventFile, verbose = false): AdventFileTest | undefined {
+function getTestForAdventFile(script: AdventFile, verbose = false): AdventFileTest | undefined {
     if (verbose) {
         console.log(`getTestForAdventFile: ${script}`);
     }
 
     const fileBase = script.path?.replace(".ts", "");
-    if (existsSync(`${fileBase}.spec.in`) && existsSync(`${fileBase}.spec.out`)) {
+    const input = script.path!.replace(`part${script.part}.ts`, "input.spec");
+    const output = `${fileBase}.spec`;
+
+    if (existsSync(input) && existsSync(output) && readFileSync(input, "utf-8") !== "" && readFileSync(output, "utf-8") !== "") {
         return {
             script,
-            input: `${fileBase}.spec.in`,
-            output: `${fileBase}.spec.out`
+            input,
+            output
         }
     }
 }

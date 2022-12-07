@@ -3,13 +3,13 @@
 import yargs, { Argv, Arguments, CamelCaseKey } from "yargs";
 
 /** Discovery */
-import { getAllScripts, getAllTests } from './util/lotad';
+import { getAllScripts } from './util/lotad';
 
 /** Execution */
 import { AdventFile, executeAdventFile, getAdventFileFromPath, populateAdventFile } from './util/exeggutor';
 
 /** Testing */
-import { AdventFileTest, executeTestsForAdventFile, getTestForAdventFile } from './util/spectrier';
+import { executeTestsForAdventFile } from './util/spectrier';
 
 /**
  * Common arguments used across commands.
@@ -50,7 +50,7 @@ const baseOptions = (yargs: Argv) => {
 // Create run and test commands
 const argv = yargs
     .command('$0 [path]', "Run Advent of Code 2022 scripts. By default, will run all scripts in src.", baseOptions)
-    .command('test [path]', "Run tests for AoC scripts.").argv as { [key in keyof Arguments<RunnerArgs> as key | CamelCaseKey<key>]: Arguments<RunnerArgs>[key] };
+    .command('test [path]', "Run tests for AoC scripts.", baseOptions).argv as { [key in keyof Arguments<RunnerArgs> as key | CamelCaseKey<key>]: Arguments<RunnerArgs>[key] };
 
 // Enable verbose logging
 if (argv.verbose) {
