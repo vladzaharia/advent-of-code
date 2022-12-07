@@ -6,20 +6,40 @@ export interface AdventFile {
     part?: number;
 }
 
-export function populateAdventFile(file: AdventFile, verbose = false): AdventFile {
+export async function executeScripts(scripts: AdventFile[], verbose = false) {
     if (verbose) {
-        console.log(`populateAdventFile: ${JSON.stringify(file)}`);
+        console.log(`executeScripts: ${JSON.stringify(scripts)}`);
     }
 
-    const { base, year, day, part, path } = file;
+    scripts.forEach(async (f) => console.log(`${f.year}/${f.day} part${f.part}: ${await executeScript(f, undefined, verbose)}`));
+}
+
+export async function executeScript(script: AdventFile, inputFile?: string, verbose = false) {    
+    if (verbose) {
+        console.log(`executeScript: ${JSON.stringify(script)}`);
+    }
+
+    const { path } = script;
+
+    const module = await import(path!);
+    return module.main(inputFile, verbose);
+}
+
+
+export function populateAdventFile(script: AdventFile, verbose = false): AdventFile {
+    if (verbose) {
+        console.log(`populateAdventFile: ${JSON.stringify(script)}`);
+    }
+
+    const { base, year, day, part, path } = script;
 
     if (base && year && day && part) {
-        file.path = `${base}/${year}/${day.toString().padStart(2, '0')}/part${part}.ts`;
+        script.path = `${base}/${year}/${day.toString().padStart(2, '0')}/part${part}.ts`;
     } else if (path) {
-        file = getAdventFileFromPath(path, verbose) || file;
+        script = getAdventFileFromPath(path, verbose) || script;
     }
 
-    return file;
+    return script;
 }
 
 export function getAdventFileFromPath(path: string, verbose = false): AdventFile | undefined {
@@ -41,15 +61,3 @@ export function getAdventFileFromPath(path: string, verbose = false): AdventFile
         throw new Error(`${path} is not a valid AoC path.`);
     }
 }
-
-export async function executeAdventFile(file: AdventFile, inputFile?: string, verbose = false) {    
-    if (verbose) {
-        console.log(`executeAdventFile: ${JSON.stringify(file)}`);
-    }
-
-    const { path } = file;
-
-    const module = await import(path!);
-    return module.main(inputFile, verbose);
-}
-

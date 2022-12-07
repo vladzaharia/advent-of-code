@@ -8,10 +8,10 @@ import { copySync } from 'fs-extra';
 import { getAllScripts } from './util/lotad';
 
 /** Script runner */
-import { AdventFile, executeAdventFile, getAdventFileFromPath, populateAdventFile } from './util/exeggutor';
+import { AdventFile, executeScripts, getAdventFileFromPath, populateAdventFile } from './util/exeggutor';
 
 /** Test runner */
-import { executeTestsForAdventFile } from './util/spectrier';
+import { executeTests } from './util/spectrier';
 
 /**
  * Common arguments used across commands.
@@ -90,12 +90,12 @@ if (adventFiles.length === 0) {
 if (argv['_'][0] === "bootstrap") {
     const currentYear = Math.max(... adventFiles.map((f) => f.year!)).toString();
     const currentDay = (Math.max(... adventFiles.map((f) => f.day!)) + 1).toString().padStart(2, '0');
+
     // Copy files from _tmpl to next day's directory
     copySync(`${__dirname}/../_tmpl`, `${__dirname}/${currentYear}/${currentDay}`);
 } else if (argv['_'][0] === "test") {
-    // Run tests
-    adventFiles.forEach(async (f) =>console.log(`${f.year}/${f.day} part${f.part}: ${await executeTestsForAdventFile(f, argv.verbose)}`));
+    executeTests(adventFiles, argv.verbose);
 } else {
     // Run scripts
-    adventFiles.forEach(async (f) => console.log(`${f.year}/${f.day} part${f.part}: ${await executeAdventFile(f, undefined, argv.verbose)}`));
+    executeScripts(adventFiles, argv.verbose);
 }
