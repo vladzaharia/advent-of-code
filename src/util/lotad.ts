@@ -6,7 +6,9 @@ export function getAllScripts(base: string, verbose = false): AdventFile[] {
         console.log(`getAllScripts: ${base}`);
     }
     
-    return getSubDirectories(base).flatMap((d) => getScriptsToRun(base, d, verbose), verbose);
+    return getSubDirectories(base)
+        .flatMap((d) => getSubDirectories(`${base}/${d}`).map((dir) => `${d}/${dir}`))
+        .flatMap((d) => getScriptsToRun(base, d, verbose), verbose);
 }
 
 function getSubDirectories(base: string, verbose = false): string[] {

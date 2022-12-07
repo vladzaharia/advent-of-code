@@ -63,26 +63,30 @@ if (argv.verbose) {
 }
 
 // Determine advent files to run/test
-let adventFiles: AdventFile[] = [];
+let adventFiles: AdventFile[] = getAllScripts(__dirname, argv.verbose);
 if (argv.path) {
-    adventFiles.push(populateAdventFile({ ... getAdventFileFromPath(argv.path, argv.verbose)!, base: __dirname }, argv.verbose));
-} else if (argv.day && argv.part) {
-    adventFiles.push(populateAdventFile({ 
-        base: __dirname,
-        day: argv.day,
-        part: argv.part
-    }, argv.verbose));
+    adventFiles = [populateAdventFile({ ... getAdventFileFromPath(argv.path, argv.verbose)!, base: __dirname }, argv.verbose)];
 } else {
-    adventFiles = getAllScripts(__dirname, argv.verbose);
+    if (argv.year) {
+        adventFiles = adventFiles.filter((f) => f.year === argv.year);
+    }
+    if (argv.day) {
+        adventFiles = adventFiles.filter((f) => f.day === argv.day);
+    }
+    if (argv.part) {
+        adventFiles = adventFiles.filter((f) => f.part === argv.part);
+    }
 }
 
 if (argv['_'][0] === "bootstrap") {
+    const currentYear = Math.max(... adventFiles.map((f) => f.year!)).toString();
+    const currentDay = (Math.max(... adventFiles.map((f) => f.day!)) + 1).toString().padStart(2, '0');
     // Copy files from _tmpl to next day's directory
-    copySync(`${__dirname}/../_tmpl`, `${__dirname}/${(Math.max(... adventFiles.map((f) => f.day!)) + 1).toString().padStart(2, '0')}`);
+    copySync(`${__dirname}/../_tmpl`, `${__dirname}/${currentYear}/${currentDay}`);
 } else if (argv['_'][0] === "test") {
     // Run tests
-    adventFiles.forEach(async (f) =>console.log(`Day ${f.day}, Part ${f.part}: ${await executeTestsForAdventFile(f, argv.verbose)}`));
+    adventFiles.forEach(async (f) =>console.log(`${f.year}/${f.day} part${f.part}: ${await executeTestsForAdventFile(f, argv.verbose)}`));
 } else {
     // Run scripts
-    adventFiles.forEach(async (f) => console.log(`Day ${f.day}, Part ${f.part}: ${await executeAdventFile(f, undefined, argv.verbose)}`));
+    adventFiles.forEach(async (f) => console.log(`${f.year}/${f.day} part${f.part}: ${await executeAdventFile(f, undefined, argv.verbose)}`));
 }

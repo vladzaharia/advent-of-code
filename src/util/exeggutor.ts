@@ -1,6 +1,7 @@
 export interface AdventFile {
     path?: string;
     base?: string;
+    year?: number;
     day?: number;
     part?: number;
 }
@@ -10,10 +11,10 @@ export function populateAdventFile(file: AdventFile, verbose = false): AdventFil
         console.log(`populateAdventFile: ${JSON.stringify(file)}`);
     }
 
-    const { base, day, part, path } = file;
+    const { base, year, day, part, path } = file;
 
-    if (base && day && part) {
-        file.path = `${base}/${day.toString().padStart(2, '0')}/part${part}.ts`;
+    if (base && year && day && part) {
+        file.path = `${base}/${year}/${day.toString().padStart(2, '0')}/part${part}.ts`;
     } else if (path) {
         file = getAdventFileFromPath(path, verbose) || file;
     }
@@ -26,14 +27,15 @@ export function getAdventFileFromPath(path: string, verbose = false): AdventFile
         console.log(`getAdventFileFromPath: ${path}`)
     }
 
-    const match = path.match(/(.*)(\/src\/)?(\d{2})\/part(\d).ts/);
+    const match = path.match(/(.*)(\/src\/)?(\d{4})\/(\d{2})\/part(\d).ts/);
 
     if (match) {
         return {
             path,
             base: match[1],
-            day: parseInt(match[3], 10),
-            part: parseInt(match[4], 10)
+            year: parseInt(match[3], 10),
+            day: parseInt(match[4], 10),
+            part: parseInt(match[5], 10)
         }
     } else {
         throw new Error(`${path} is not a valid AoC path.`);
@@ -45,7 +47,7 @@ export async function executeAdventFile(file: AdventFile, inputFile?: string, ve
         console.log(`executeAdventFile: ${JSON.stringify(file)}`);
     }
 
-    const { day, part, path } = file;
+    const { path } = file;
 
     const module = await import(path!);
     return module.main(inputFile, verbose);
