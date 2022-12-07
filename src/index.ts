@@ -2,6 +2,8 @@
 
 import yargs, { Argv, Arguments, CamelCaseKey } from "yargs";
 
+import { copySync } from 'fs-extra';
+
 /** Script Discovery */
 import { getAllScripts } from './util/lotad';
 
@@ -50,7 +52,9 @@ const baseOptions = (yargs: Argv) => {
 // Create run and test commands
 const argv = yargs
     .command('$0 [path]', "Run Advent of Code 2022 scripts. By default, will run all scripts in src.", baseOptions)
-    .command('test [path]', "Run tests for AoC scripts.", baseOptions).argv as { [key in keyof Arguments<RunnerArgs> as key | CamelCaseKey<key>]: Arguments<RunnerArgs>[key] };
+    .command('test [path]', "Run tests for AoC scripts.", baseOptions)
+    .command('bootstrap', "Bootstraps the next day's scripts, input and spec files.")
+    .argv as { [key in keyof Arguments<RunnerArgs> as key | CamelCaseKey<key>]: Arguments<RunnerArgs>[key] };
 
 // Enable verbose logging
 if (argv.verbose) {
@@ -73,7 +77,9 @@ if (argv.path) {
 }
 
 // Run or test the files
-if (argv['_'][0] === "test") {
+if (argv['_'][0] === "bootstrap") {
+    copySync(`${__dirname}/../_tmpl`, `${__dirname}/${(Math.max(... adventFiles.map((f) => f.day!)) + 1).toString().padStart(2, '0')}`);
+} else if (argv['_'][0] === "test") {
     adventFiles.forEach(async (f) =>console.log(`Day ${f.day}, Part ${f.part}: ${await executeTestsForAdventFile(f, argv.verbose)}`));
 } else {
     adventFiles.forEach(async (f) => console.log(`Day ${f.day}, Part ${f.part}: ${await executeAdventFile(f, undefined, argv.verbose)}`));
