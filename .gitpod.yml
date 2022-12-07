@@ -4,4 +4,4 @@
 
 tasks:
   - init: npm install
-  - command: npm isntall && npm start
+  - command: npm isntall && npm start && npm test
