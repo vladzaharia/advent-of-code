@@ -2,6 +2,7 @@ import * as fs from 'fs';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
     const inputFile = fs.readFileSync(input, 'utf-8');
+    const lines = inputFile.split(/\r?\n/);
 
     // Do something with inputFile here
 
