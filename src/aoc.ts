@@ -56,9 +56,9 @@ const baseOptions = (yargs: Argv) => {
 
 // Create run and test commands
 const argv = yargs
+    .command('bootstrap', "Bootstraps the next day's scripts, input and spec files.")
     .command('$0 [path]', "Run Advent of Code 2022 scripts. By default, will run all scripts in src.", baseOptions)
     .command('test [path]', "Run tests for AoC scripts.", baseOptions)
-    .command('bootstrap', "Bootstraps the next day's scripts, input and spec files.")
     .argv as { [key in keyof Arguments<RunnerArgs> as key | CamelCaseKey<key>]: Arguments<RunnerArgs>[key] };
 
 // Enable verbose logging
