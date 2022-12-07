@@ -85,6 +85,7 @@ if (argv.path) {
 
 if (adventFiles.length === 0) {
     console.error("\x1b[1m\x1b[31m[X] No files found to execute!\x1b[0m");
+    process.exit(2);
 }
 
 if (argv['_'][0] === "bootstrap") {
