@@ -27,4 +27,4 @@ jobs:
         cache: 'npm'
     - run: npm install
     - name: Run tests for ${{ matrix.aoc-year }}
-      run: ./src/aoc.ts test -y ${{ matrix.aoc-year }}
+      run: node --loader ts-node/esm.mjs ./src/aoc.ts test -y ${{ matrix.aoc-year }}
