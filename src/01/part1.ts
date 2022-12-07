@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
-export function main(verbose = false) {
-    const inputFile = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8');
+export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
+    const inputFile = fs.readFileSync(input, 'utf-8');
 
     let max = 0;
     

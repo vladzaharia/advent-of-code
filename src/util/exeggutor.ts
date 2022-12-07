@@ -1,41 +1,8 @@
-import { readdirSync } from 'fs';
-
 export interface AdventFile {
     path?: string;
     base?: string;
     day?: number;
     part?: number;
-}
-
-export function getAllScripts(base: string, verbose = false): AdventFile[] {
-    if (verbose) {
-        console.log(`getAllScripts: ${base}`);
-    }
-    
-    return getSubDirectories(base).flatMap((d) => getScriptsToRun(base, d, verbose), verbose);
-}
-
-function getSubDirectories(base: string, verbose = false): string[] {
-    if (verbose) {
-        console.log(`getAllScripts: ${base}`);
-    }
-
-    return readdirSync(base, { withFileTypes: true })
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name)
-        .filter(dir => !dir.includes("util"));
-}
-
-function getScriptsToRun(base: string, scriptsFolder: string, verbose = false): AdventFile[] {
-    if (verbose) {
-        console.log(`getScriptsToRun: ${base}/${scriptsFolder}`);
-    }
-
-    const files = readdirSync(`${base}/${scriptsFolder}`).filter((f) => f.match(/part\d\.ts/));
-
-    return files.map((file) => {
-        return populateAdventFile({ path: `${base}/${scriptsFolder}/${file}` }, verbose);
-    });
 }
 
 export function populateAdventFile(file: AdventFile, verbose = false): AdventFile {
@@ -73,7 +40,7 @@ export function getAdventFileFromPath(path: string, verbose = false): AdventFile
     }
 }
 
-export async function executeAdventFile(file: AdventFile, verbose = false) {    
+export async function executeAdventFile(file: AdventFile, inputFile?: string, verbose = false) {    
     if (verbose) {
         console.log(`executeAdventFile: ${JSON.stringify(file)}`);
     }
@@ -81,6 +48,6 @@ export async function executeAdventFile(file: AdventFile, verbose = false) {
     const { day, part, path } = file;
 
     const module = await import(path!);
-    console.log(`Day ${day}, Part ${part}: ${module.main(verbose)}`);
+    return module.main(inputFile, verbose);
 }
 
