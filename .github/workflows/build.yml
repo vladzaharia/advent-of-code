@@ -26,5 +26,9 @@ jobs:
         node-version: 18.x
         cache: 'npm'
     - run: npm install
+
+    - name: Run scripts for ${{ matrix.aoc-year }}
+      run: node --loader ts-node/esm.mjs ./src/aoc.ts -y ${{ matrix.aoc-year }}
+
     - name: Run tests for ${{ matrix.aoc-year }}
       run: node --loader ts-node/esm.mjs ./src/aoc.ts test -y ${{ matrix.aoc-year }}
