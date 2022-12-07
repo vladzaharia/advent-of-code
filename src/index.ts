@@ -76,11 +76,13 @@ if (argv.path) {
     adventFiles = getAllScripts(__dirname, argv.verbose);
 }
 
-// Run or test the files
 if (argv['_'][0] === "bootstrap") {
+    // Copy files from _tmpl to next day's directory
     copySync(`${__dirname}/../_tmpl`, `${__dirname}/${(Math.max(... adventFiles.map((f) => f.day!)) + 1).toString().padStart(2, '0')}`);
 } else if (argv['_'][0] === "test") {
+    // Run tests
     adventFiles.forEach(async (f) =>console.log(`Day ${f.day}, Part ${f.part}: ${await executeTestsForAdventFile(f, argv.verbose)}`));
 } else {
+    // Run scripts
     adventFiles.forEach(async (f) => console.log(`Day ${f.day}, Part ${f.part}: ${await executeAdventFile(f, undefined, argv.verbose)}`));
 }
