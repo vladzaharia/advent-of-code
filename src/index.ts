@@ -2,13 +2,13 @@
 
 import yargs, { Argv, Arguments, CamelCaseKey } from "yargs";
 
-/** Discovery */
+/** Script Discovery */
 import { getAllScripts } from './util/lotad';
 
-/** Execution */
+/** Script runner */
 import { AdventFile, executeAdventFile, getAdventFileFromPath, populateAdventFile } from './util/exeggutor';
 
-/** Testing */
+/** Test runner */
 import { executeTestsForAdventFile } from './util/spectrier';
 
 /**
