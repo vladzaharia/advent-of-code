@@ -28,65 +28,73 @@ mainLoop:
             }
 
             // Determine if there's any trees north of here
+            let trees: number[] = [];
             for (let i1 = 0; i1 < i; i1++) {
-                if (grid[i1][j] >= tree) {
-                    if (verbose) {
-                        console.log(`${i},${j}: invisible ${i1},${j} ${grid[i1][j]} > ${tree}`);
-                    }
-                } else {
-                    if (verbose) {
-                        console.log(`${i},${j}: visible ${i1},${j} ${grid[i1][j]} < ${tree}`);
-                    }
+                trees.push(grid[i1][j]);
+            }
+            if (trees.every((t) => t < tree)) {
+                if (verbose) {
+                    console.log(`${i},${j}: N VISIBLE [${trees}] < ${tree}`);
+                }
 
-                    visible = true;
-                    break;
+                visibleTrees++;
+                continue mainLoop;
+            } else {
+                if (verbose) {
+                    console.log(`${i},${j}: N [${trees}] > ${tree}`);
                 }
             }
 
             // Determine if there's any trees south of here
+            trees = [];
             for (let i1 = i + 1; i1 < grid.length; i1++) {
-                if (grid[i1][j] >= tree) {
-                    if (verbose) {
-                        console.log(`${i},${j}: invisible ${i1},${j} ${grid[i1][j]} > ${tree}`);
-                    }
-                } else {
-                    if (verbose) {
-                        console.log(`${i},${j}: visible ${i1},${j} ${grid[i1][j]} < ${tree}`);
-                    }
-                    visible = true;
-                    break;
+                trees.push(grid[i1][j]);
+            }
+            if (trees.every((t) => t < tree)) {
+                if (verbose) {
+                    console.log(`${i},${j}: S VISIBLE [${trees}] < ${tree}`);
+                }
+
+                visibleTrees++;
+                continue mainLoop;
+            } else {
+                if (verbose) {
+                    console.log(`${i},${j}: S [${trees}] > ${tree}`);
                 }
             }
 
             // Determine if there's any trees east of here
+            trees = [];
             for (let j1 = 0; j1 < j; j1++) {
-                if (grid[i][j1] >= tree) {
-                    if (verbose) {
-                        console.log(`${i},${j}: invisible ${i},${j1} ${grid[i][j1]} > ${tree}`);
-                    }
-                } else {
-                    if (verbose) {
-                        console.log(`${i},${j}: visible ${i},${j1} ${grid[i][j1]} < ${tree}`);
-                    }
+                trees.push(grid[i][j1]);
+            }
+            if (trees.every((t) => t < tree)) {
+                if (verbose) {
+                    console.log(`${i},${j}: E VISIBLE [${trees}] < ${tree}`);
+                }
 
-                    visible = true;
-                    break;
+                visibleTrees++;
+                continue mainLoop;
+            } else {
+                if (verbose) {
+                    console.log(`${i},${j}: E [${trees}] > ${tree}`);
                 }
             }
 
             // Determine if there's any trees west of here
+            trees = [];
             for (let j1 = j + 1; j1 < line.length; j1++) {
-                if (grid[i][j1] >= tree) {
-                    if (verbose) {
-                        console.log(`${i},${j}: invisible ${i},${j1} ${grid[i][j1]} > ${tree}`);
-                    }
-                } else {
-                    if (verbose) {
-                        console.log(`${i},${j}: visible ${i},${j1} ${grid[i][j1]} < ${tree}`);
-                    }
+                trees.push(grid[i][j1]);
+            }
+            if (trees.every((t) => t < tree)) {
+                if (verbose) {
+                    console.log(`${i},${j}: W VISIBLE [${trees}] < ${tree}`);
+                }
 
-                    visible = true;
-                    break;
+                visibleTrees++;
+            } else {
+                if (verbose) {
+                    console.log(`${i},${j}: W [${trees}] > ${tree}`);
                 }
             }
         }
