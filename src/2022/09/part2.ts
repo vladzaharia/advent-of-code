@@ -92,15 +92,12 @@ function moveHead({ i, j }: Coordinates, direction: Direction, verbose = false):
 
 function moveTails(tailCoordsArray: Coordinates[], headCoords: Coordinates, verbose = false): Coordinates[] {
     const result: Coordinates[] = [];
-
-    let tempHead = headCoords;
     
     for (let i = 0; i < tailCoordsArray.length; i++) {
-        const tailCoords = moveTail(tailCoordsArray[i], tempHead, verbose);
+        const tailCoords = moveTail(tailCoordsArray[i], headCoords, verbose);
 
         result.push(tailCoords);
-
-        tempHead = tailCoords;
+        headCoords = tailCoords;
     }
 
     return result;
