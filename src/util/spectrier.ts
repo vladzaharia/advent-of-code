@@ -64,7 +64,7 @@ export async function executeTest(script: AdventFile, verbose = false): Promise<
 
 function getTestForAdventFile(script: AdventFile, verbose = false): AdventFileTest | undefined {
     if (verbose) {
-        console.log(`getTestForAdventFile: ${script}`);
+        console.log(`getTestForAdventFile: ${JSON.stringify(script)}`);
     }
 
     const fileBase = script.path?.replace(".ts", "");

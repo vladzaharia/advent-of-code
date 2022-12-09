@@ -7,7 +7,7 @@ export function main(input: string = `${__dirname}/input.txt`, verbose = false) 
     // Do something with inputFile here
 
     if (verbose) {
-        console.log("Log something important happening, but only when verbose");
+        console.log("PART2: Log something important happening, but only when verbose");
     }
 
     // Return the value
