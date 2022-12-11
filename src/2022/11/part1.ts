@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import { number } from 'yargs';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
     const inputFile = fs.readFileSync(input, 'utf-8');
@@ -11,54 +10,7 @@ export function main(input: string = `${__dirname}/input.txt`, verbose = false) 
 
     for (let i = 1; i <= 20; i++) {
         for (let m = 0; m < monkeys.length; m++) {
-            const monkey = monkeys[m];
-
-            for (let item of monkey.items) {
-                results[m]++;
-
-                if (verbose) {
-                    console.log(`Round ${i}, item ${item}`);
-                }
-                
-                // Monkey inspects item
-                item = monkey.operation(item);
-
-                if (verbose) {
-                    console.log(`Round ${i}, inspected ${item}`);
-                }
-
-                // Relief
-                item = Math.floor(item / 3);
-
-                if (verbose) {
-                    console.log(`Round ${i}, relief ${item}`);
-                }
-
-                // Monkey tests
-                const testResult = monkey.test(item);
-
-                if (verbose) {
-                    console.log(`Round ${i}, test result ${item}`);
-                }
-
-                // Monkey throws
-                if (testResult) {
-                    monkeys[monkey.trueMonkey].items.push(item);
-
-                    if (verbose) {
-                        console.log(`Round ${i}, throwing ${item} to ${monkey.trueMonkey}`);
-                    }
-                } else {
-                    monkeys[monkey.falseMonkey].items.push(item);
-
-                    if (verbose) {
-                        console.log(`Round ${i}, throwing ${item} to ${monkey.falseMonkey}`);
-                    }
-                }
-            }
-
-            // Thrown away all items
-            monkey.items = [];
+            processMonkeyMove(monkeys, results, m, i);
         }
     }
 
@@ -136,4 +88,55 @@ function parseOperation(line: string, verbose = false): (old: number) => number 
         case "*":
             return (old: number) => param === "old" ? old * old : old * param;
     }
+}
+
+function processMonkeyMove(monkeys: Monkey[], results: number[], m: number, i: number, verbose = false) {
+    const monkey = monkeys[m];
+
+    for (let item of monkey.items) {
+        results[m]++;
+
+        if (verbose) {
+            console.log(`Round ${i}, item ${item}`);
+        }
+        
+        // Monkey inspects item
+        item = monkey.operation(item);
+
+        if (verbose) {
+            console.log(`Round ${i}, inspected ${item}`);
+        }
+
+        // Relief
+        item = Math.floor(item / 3);
+
+        if (verbose) {
+            console.log(`Round ${i}, relief ${item}`);
+        }
+
+        // Monkey tests
+        const testResult = monkey.test(item);
+
+        if (verbose) {
+            console.log(`Round ${i}, test result ${item}`);
+        }
+
+        // Monkey throws
+        if (testResult) {
+            monkeys[monkey.trueMonkey].items.push(item);
+
+            if (verbose) {
+                console.log(`Round ${i}, throwing ${item} to ${monkey.trueMonkey}`);
+            }
+        } else {
+            monkeys[monkey.falseMonkey].items.push(item);
+
+            if (verbose) {
+                console.log(`Round ${i}, throwing ${item} to ${monkey.falseMonkey}`);
+            }
+        }
+    }
+
+    // Thrown away all items
+    monkey.items = [];
 }

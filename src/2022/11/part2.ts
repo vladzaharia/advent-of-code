@@ -1,71 +1,17 @@
 import * as fs from 'fs';
-import { number } from 'yargs';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
     const inputFile = fs.readFileSync(input, 'utf-8');
     const lines = inputFile.split(/\r?\n\r?\n/).map((line) => line.split(/\r?\n/));
 
     const monkeys = lines.map((monkeyLines) => createMonkey(monkeyLines, verbose));
-
     const commonDivisor = monkeys.reduce<number>((a, b) => a * b.divisor, 1);
-
     const results = Array<number>(monkeys.length).fill(0);
 
     for (let i = 1; i <= 10000; i++) {
         for (let m = 0; m < monkeys.length; m++) {
-            const monkey = monkeys[m];
-
-            for (let item of monkey.items) {
-                results[m]++;
-
-                if (verbose) {
-                    console.log(`Round ${i}, item ${item}`);
-                }
-                
-                // Monkey inspects item
-                item = monkey.operation(item);
-
-                if (verbose) {
-                    console.log(`Round ${i}, inspected ${item}`);
-                }
-
-                // Relief
-                item = item % commonDivisor;
-
-                if (verbose) {
-                    console.log(`Round ${i}, relief ${item}`);
-                }
-
-                // Monkey tests
-                const testResult = monkey.test(item);
-
-                if (verbose) {
-                    console.log(`Round ${i}, test result ${item}`);
-                }
-
-                // Monkey throws
-                if (testResult) {
-                    monkeys[monkey.trueMonkey].items.push(item);
-
-                    if (verbose) {
-                        console.log(`Round ${i}, throwing ${item} to ${monkey.trueMonkey}`);
-                    }
-                } else {
-                    monkeys[monkey.falseMonkey].items.push(item);
-
-                    if (verbose) {
-                        console.log(`Round ${i}, throwing ${item} to ${monkey.falseMonkey}`);
-                    }
-                }
-            }
-
-            // Thrown away all items
-            monkey.items = [];
+            processMonkeyMove(monkeys, results, commonDivisor, m, i);
         }
-    }
-
-    if (verbose) {
-        console.log(`Results: ${results}`)
     }
 
     // Return the value
@@ -144,4 +90,55 @@ function parseOperation(line: string, verbose = false): (old: number) => number 
         case "*":
             return (old: number) => param === "old" ? old * old : old * param;
     }
+}
+
+function processMonkeyMove(monkeys: Monkey[], results: number[], commonDivisor: number, m: number, i: number, verbose = false) {
+    const monkey = monkeys[m];
+
+    for (let item of monkey.items) {
+        results[m]++;
+
+        if (verbose) {
+            console.log(`Round ${i}, item ${item}`);
+        }
+        
+        // Monkey inspects item
+        item = monkey.operation(item);
+
+        if (verbose) {
+            console.log(`Round ${i}, inspected ${item}`);
+        }
+
+        // Relief
+        item = Math.floor(item / 3);
+
+        if (verbose) {
+            console.log(`Round ${i}, relief ${item}`);
+        }
+
+        // Monkey tests
+        const testResult = monkey.test(item);
+
+        if (verbose) {
+            console.log(`Round ${i}, test result ${item}`);
+        }
+
+        // Monkey throws
+        if (testResult) {
+            monkeys[monkey.trueMonkey].items.push(item);
+
+            if (verbose) {
+                console.log(`Round ${i}, throwing ${item} to ${monkey.trueMonkey}`);
+            }
+        } else {
+            monkeys[monkey.falseMonkey].items.push(item);
+
+            if (verbose) {
+                console.log(`Round ${i}, throwing ${item} to ${monkey.falseMonkey}`);
+            }
+        }
+    }
+
+    // Thrown away all items
+    monkey.items = [];
 }
