@@ -101,7 +101,8 @@ if (argv['_'][0] === "bootstrap") {
     console.log(`Downloading input from ${url}`);
     axios.get(url, {
         headers: {
-            "Cookie": `session=${process.env.COOKIE_SESSION}`
+            "Cookie": `session=${process.env.COOKIE_SESSION}`,
+            'User-Agent': 'vladzaharia/advent-of-code // accounts@vlad.gg'
         }
     }).then((resp) => {
         if (resp.status === 200) {
