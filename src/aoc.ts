@@ -1,8 +1,8 @@
 #!/usr/bin/env node --loader ts-node/esm.mjs
 
 import yargs, { Argv, Arguments, CamelCaseKey } from "yargs";
-
-import { copySync } from 'fs-extra';
+import { copySync, writeFileSync } from 'fs-extra';
+import axios from "axios";
 
 /** Script Discovery */
 import { getAllScripts } from './util/lotad';
@@ -93,7 +93,21 @@ if (argv['_'][0] === "bootstrap") {
     const currentDay = (Math.max(... adventFiles.map((f) => f.day!)) + 1).toString().padStart(2, '0');
 
     // Copy files from _tmpl to next day's directory
+    console.log(`Copying template to ${__dirname}/${currentYear}/${currentDay}`);
     copySync(`${__dirname}/../_tmpl`, `${__dirname}/${currentYear}/${currentDay}`);
+
+    // Download input file from AoC site
+    const url = `https://adventofcode.com/${currentYear}/day/${currentDay}/input`;
+    console.log(`Downloading input from ${url}`);
+    axios.get(url, {
+        headers: {
+            "Cookie": `session=${process.env.COOKIE_SESSION}`
+        }
+    }).then((resp) => {
+        if (resp.status === 200) {
+            writeFileSync(`${__dirname}/${currentYear}/${currentDay}/input.txt`, resp.data);
+        }
+    })
 } else if (argv['_'][0] === "test") {
     executeTests(adventFiles, argv.verbose);
 } else {
