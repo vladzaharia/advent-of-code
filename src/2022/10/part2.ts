@@ -1,0 +1,71 @@
+import * as fs from 'fs';
+
+export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
+    const inputFile = fs.readFileSync(input, 'utf-8');
+    const lines = inputFile.split(/\r?\n/);
+
+    // Contain the resulting CRT display
+    const result: string[] = [];
+    let currentLine: string = "";
+
+    // X register, starts at 1
+    let regX = 2;
+
+    // In the middle of an `addx` which takes 2 cycles
+    let midAdd: number | false = false;
+
+    // Go through cycles
+    for (let i = 1; i <= 240; i++) {
+        const spritePos = [regX - 1, regX, regX + 1];
+        const pixel = (i%40);
+
+        if (verbose) {
+            console.log(`cycle ${i}/ pixel ${pixel}: sprite at ${spritePos}`);    
+        }
+
+        // Add to current line
+        if (spritePos.includes(pixel)) {
+            currentLine += "█";
+
+            if (verbose) {
+                console.log(`cycle ${i}/ pixel ${pixel}: adding █, line ${currentLine}`);    
+            }
+        } else {
+            currentLine += ".";
+
+            if (verbose) {
+                console.log(`cycle ${i}/ pixel ${pixel}: adding ., line ${currentLine}`);    
+            }
+        }
+
+        // Push current line and reset
+        if ([40, 80, 120, 160, 200, 240].includes(i)) {
+            result.push(currentLine);
+            currentLine = "";
+        }
+
+        // Execute current cycle's op
+        if (midAdd) {
+            if (verbose) {
+                console.log(`cycle ${i}/ pixel ${pixel}: adding ${midAdd} to ${regX}`);    
+            }
+
+            regX += midAdd;
+            midAdd = false;
+        } else {
+            // Grab a line, parse it, and run an op
+            const line = lines.splice(0, 1)[0];
+
+            if (verbose) {
+                console.log(`cycle ${i}/ pixel ${pixel}: ${line}`);
+            }
+
+            if (line !== "noop") {
+                midAdd = parseInt(line.split(" ")[1], 10);
+            }
+        }
+    }
+
+    // Return the value
+    return result.join("\n");
+}
