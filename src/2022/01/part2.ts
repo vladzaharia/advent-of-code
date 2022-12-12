@@ -3,7 +3,7 @@ import { Unown } from '../../util/unown';
 export function main() {    
     const allNumbers = Unown.parseInput<number[]>(
         { 
-            splitter: [/\r?\n\r?\n/, /\r?\n/], 
+            splitter: [Unown.TWO_LINES, Unown.ONE_LINE], 
             output: "number" 
         }).map((numbers) => numbers.reduce((a, b) => a + b));
 

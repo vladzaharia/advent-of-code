@@ -23,8 +23,8 @@ export module Lotad {
         const currentDay = (Math.max(... scripts.map((f) => f.day)) + 1).toString().padStart(2, '0');
 
         // Copy files from _tmpl to next day's directory
-        console.log(`Copying template to ${__dirname}/${currentYear}/${currentDay}`);
-        copySync(`${__dirname}/../_tmpl`, `${__dirname}/${currentYear}/${currentDay}`);
+        console.log(`Copying template to ${__dirname}/../${currentYear}/${currentDay}`);
+        copySync(`${__dirname}/../../_tmpl`, `${__dirname}/../${currentYear}/${currentDay}`);
 
         // Download input file from AoC site
         const url = `https://adventofcode.com/${currentYear}/day/${currentDay}/input`;
@@ -36,7 +36,7 @@ export module Lotad {
             }
         }).then((resp) => {
             if (resp.status === 200) {
-                writeFileSync(`${__dirname}/${currentYear}/${currentDay}/input.txt`, resp.data);
+                writeFileSync(`${__dirname}/../${currentYear}/${currentDay}/input.txt`, resp.data);
             }
         })
     }

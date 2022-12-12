@@ -7,6 +7,9 @@ import { Missingno } from "./missingno";
  * Basic line parsing helpers to use for quickly splicing up inputs.
  */
 export module Unown {
+    export const ONE_LINE = /\r?\n/;
+    export const TWO_LINES = /\r?\n\r?\n/;
+
     export type Splitter = string | RegExp;
 
     export interface LoadOptions<T = string> {
@@ -52,7 +55,7 @@ export module Unown {
 
         public parseInput(): T[] {
             // Get loader options
-            const { splitter = /\r?\n/, parser, output } = this._options;
+            const { splitter = ONE_LINE, parser, output } = this._options;
 
             Missingno.log(`parseInput: ${this._path}, splitter ${splitter}, parser ${parser}, output ${output}`);
 

@@ -3,7 +3,7 @@ import { Unown } from '../../util/unown';
 
 export function main() {
     const monkeys = Unown.parseInput<string[]>({ 
-        splitter: [/\r?\n\r?\n/, /\r?\n/], 
+        splitter: [Unown.TWO_LINES, Unown.ONE_LINE], 
     }).map((monkeyLines) => createMonkey(monkeyLines));
 
     const results = Array<number>(monkeys.length).fill(0);
