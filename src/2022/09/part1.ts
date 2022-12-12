@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const instructions = Unown.parseInput(input, { parser: { custom: parseLine } });
+    const instructions = Unown.parseInput(input, { parser: parseLine });
 
     // Generate a nxn grid
     const gridSize = 1000;

@@ -19,28 +19,8 @@ export module Unown {
 
         /**
          * How to parse each line, defaults to no parsing.
-         * 
-         * If defined, will run in the following order:
-         *  - `regexp`
-         *  - `split`
-         *  - `custom`
          */
-        parser?: {
-            /** 
-             * Basic regex parsing, will use match[1] if available, match[0] otherwise.
-             */
-            regexp?: RegExp;
-
-            /**
-             * Basic .split parsing, will use split[1].
-             */
-            split?: string;
-
-            /**
-             * Custom parsing to use custom logic.
-             */
-            custom?: (line: string) => T;
-        }
+        parser?: RegExp | ((line: string) => T);
 
         /**
          * How to output each parsed line. If not defined, will keep as string or output of `parser.custom`.
@@ -69,19 +49,14 @@ export module Unown {
         }
 
         if (parser) {
-            if (parser.regexp) {
+            if (typeof parser === "function") {
+                lines = lines.map((l) => execute(l, (l1) => parser(l1)));
+            
+            } else {
                 lines = lines.map((l) => execute(l, (l1) => {
-                    const match = l1.match(parser.regexp!);
+                    const match = l1.match(parser);
                     return match![1] || match![0];
                 }));
-            }
-
-            if (parser.split) {
-                lines = lines.map((l) => execute(l, (l1) => l1.split(parser.split!)[1]));
-            }
-
-            if (parser.custom) {
-                lines = lines.map((l) => execute(l, (l1) => parser.custom!(l1)));
             }
         }
 

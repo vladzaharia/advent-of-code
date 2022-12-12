@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const grid = Unown.parseInput(input, { parser: { custom: (l) => l.split("").map((d) => parseInt(d, 10)) } });
+    const grid = Unown.parseInput<number[]>(input, { splitter: [/\r?\n/, ""], output: "number" });
 
     const distances = grid.flatMap((lines, i) => lines.map((_line, j) => getTreeScore(grid, i, j, verbose)));
 

@@ -2,8 +2,7 @@ import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
     return Unown.parseInput<number>(input, {
-        parser: {
-            custom: (line) => {
+        parser: (line) => {
                 const assignments = line.split(",");
 
                 const firstAssingment = getAssignmentList(assignments[0]);
@@ -15,8 +14,7 @@ export function main(input: string = `${__dirname}/input.txt`, verbose = false) 
 
                 return 0;
             }
-        }
-    }).reduce((a, b) => a + b);
+        }).reduce((a, b) => a + b);
 }
 
 function getAssignmentList(assignment: string): number[] {
