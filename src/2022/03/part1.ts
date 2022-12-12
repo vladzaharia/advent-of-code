@@ -1,24 +1,17 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-
-    let total = 0;
-    
-    // Split on empty line
-    inputFile.split(/\r?\n/).forEach((line, idx) => {
-        const cpt1 = line.slice(0, line.length / 2).split("");
-        const cpt2 = line.slice(line.length / 2).split("");
-
-        const common = cpt1.filter((i) => cpt2.includes(i));
-        const value = getValue(common);
-        total += value;
-
-        // console.log(`1: ${cpt1}, 2: ${cpt2}, ${common}/${value}`);
-    });
-
-    // console.log(`Day 3, Part 1: ${total}`);
-    return total;
+export function main(input: string = `${__dirname}/input.txt`, verbose = false) {    
+    return Unown.parseInput(input, {
+        parser: {
+            custom: (line) => {
+                const cpt1 = line.slice(0, line.length / 2).split("");
+                const cpt2 = line.slice(line.length / 2).split("");
+        
+                const common = cpt1.filter((i) => cpt2.includes(i));
+                return getValue(common);
+            }
+        }
+    }).reduce((a, b) => a + b);
 }
 
 function getValue(items: string[]): number {

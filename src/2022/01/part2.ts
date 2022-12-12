@@ -1,21 +1,11 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-
-    let allNumbers: number[] = [];
-    
-    // Split on two empty lines
-    inputFile.split(/\r?\n\r?\n/).forEach((lineGroup, idx) => {
-        let total = 0;
-        lineGroup.split(/\r?\n/).forEach(line => {
-            total += parseInt(line, 10);
-        });
-
-        allNumbers.push(total);
-    
-        // console.log(`${idx}: ${total}`);
-    });
+export function main(input: string = `${__dirname}/input.txt`) {    
+    const allNumbers = Unown.parseInput<number[]>(input, 
+        { 
+            splitter: [/\r?\n\r?\n/, /\r?\n/], 
+            output: "number" 
+        }).map((numbers) => numbers.reduce((a, b) => a + b));
 
     allNumbers.sort((a,b) => a - b)
 

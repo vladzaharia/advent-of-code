@@ -1,16 +1,15 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-
     let max = 0;
     
     // Split on two empty lines
-    inputFile.split(/\r?\n\r?\n/).forEach((lineGroup, idx) => {
-        let total = 0;
-        lineGroup.split(/\r?\n/).forEach(line => {
-            total += parseInt(line, 10);
-        });
+    Unown.parseInput<number[]>(input, 
+        { 
+            splitter: [/\r?\n\r?\n/, /\r?\n/], 
+            output: "number" 
+        }).forEach((numbers, idx) => {
+        let total = numbers.reduce((a, b) => a + b);
     
         if (total > max) {
             max = total;

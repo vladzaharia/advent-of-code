@@ -1,12 +1,10 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-
     let total = 0;
     
     // Split on 2 empty lines
-    const fileParts = inputFile.split(/\r?\n\r?\n/);
+    const fileParts = Unown.parseInput(input, { splitter: /\r?\n\r?\n/ });
 
     const stackLines = fileParts[0].split(/\r?\n/).slice(0,-1);
     const stacks = parseStacks(stackLines);

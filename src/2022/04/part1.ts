@@ -1,24 +1,22 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
+    return Unown.parseInput<number>(input, {
+        parser: {
+            custom: (line) => {
+                const assignments = line.split(",");
 
-    let total = 0;
-    
-    // Split on empty line
-    inputFile.split(/\r?\n/).forEach((line, idx) => {
-        const assignments = line.split(",");
+                const firstAssingment = getAssignmentList(assignments[0]);
+                const secondAssignment = getAssignmentList(assignments[1]);
 
-        const firstAssingment = getAssignmentList(assignments[0]);
-        const secondAssignment = getAssignmentList(assignments[1]);
+                if (firstAssingment.every((v) => secondAssignment.includes(v)) || secondAssignment.every((v) => firstAssingment.includes(v))) {
+                    return 1;
+                }
 
-        if (firstAssingment.every((v) => secondAssignment.includes(v)) || secondAssignment.every((v) => firstAssingment.includes(v))) {
-            total++;
+                return 0;
+            }
         }
-    });
-
-    // console.log(`Day 4, Part 1: ${total}`);
-    return total;
+    }).reduce((a, b) => a + b);
 }
 
 function getAssignmentList(assignment: string): number[] {

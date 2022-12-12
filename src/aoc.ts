@@ -4,14 +4,9 @@ import yargs, { Argv, Arguments, CamelCaseKey } from "yargs";
 import { copySync, writeFileSync } from 'fs-extra';
 import axios from "axios";
 
-/** Script Discovery */
-import { getAllScripts } from './util/lotad';
-
-/** Script runner */
-import { AdventFile, executeScripts, getAdventFileFromPath, populateAdventFile } from './util/exeggutor';
-
-/** Test runner */
-import { executeTests } from './util/spectrier';
+import { Lotad } from './util/lotad';
+import { Exeggutor } from './util/exeggutor';
+import { Spectrier } from './util/spectrier';
 
 /**
  * Common arguments used across commands.
@@ -68,50 +63,32 @@ if (argv.verbose) {
 }
 
 // Determine advent files to run/test
-let adventFiles: AdventFile[] = getAllScripts(__dirname, argv.verbose);
+let scripts: Exeggutor.Script[] = Lotad.getAllScripts(__dirname, argv.verbose);
 if (argv.path) {
-    adventFiles = [populateAdventFile({ ... getAdventFileFromPath(argv.path, argv.verbose)!, base: __dirname }, argv.verbose)];
+    scripts = [Exeggutor.createScriptFromPath(argv.path, argv.verbose)!];
 } else {
     if (argv.year) {
-        adventFiles = adventFiles.filter((f) => f.year === argv.year);
+        scripts = scripts.filter((f) => f.year === argv.year);
     }
     if (argv.day) {
-        adventFiles = adventFiles.filter((f) => f.day === argv.day);
+        scripts = scripts.filter((f) => f.day === argv.day);
     }
     if (argv.part) {
-        adventFiles = adventFiles.filter((f) => f.part === argv.part);
+        scripts = scripts.filter((f) => f.part === argv.part);
     }
 }
 
-if (adventFiles.length === 0) {
-    console.error("\x1b[1m\x1b[31m[X] No files found to execute!\x1b[0m");
+// Error out if no scripts are found
+if (scripts.length === 0) {
+    console.error("\x1b[1m\x1b[31m[X] No scripts found to execute!\x1b[0m");
     process.exit(2);
 }
 
+// Execute action
 if (argv['_'][0] === "bootstrap") {
-    const currentYear = Math.max(... adventFiles.map((f) => f.year!)).toString();
-    const currentDay = (Math.max(... adventFiles.map((f) => f.day!)) + 1).toString().padStart(2, '0');
-
-    // Copy files from _tmpl to next day's directory
-    console.log(`Copying template to ${__dirname}/${currentYear}/${currentDay}`);
-    copySync(`${__dirname}/../_tmpl`, `${__dirname}/${currentYear}/${currentDay}`);
-
-    // Download input file from AoC site
-    const url = `https://adventofcode.com/${currentYear}/day/${currentDay}/input`;
-    console.log(`Downloading input from ${url}`);
-    axios.get(url, {
-        headers: {
-            "Cookie": `session=${process.env.COOKIE_SESSION}`,
-            'User-Agent': 'vladzaharia/advent-of-code // accounts@vlad.gg'
-        }
-    }).then((resp) => {
-        if (resp.status === 200) {
-            writeFileSync(`${__dirname}/${currentYear}/${currentDay}/input.txt`, resp.data);
-        }
-    })
+    Lotad.bootstrap(scripts);
 } else if (argv['_'][0] === "test") {
-    executeTests(adventFiles, argv.verbose);
+    Spectrier.executeTests(scripts, argv.verbose);
 } else {
-    // Run scripts
-    executeScripts(adventFiles, argv.verbose);
+    Exeggutor.executeScripts(scripts, argv.verbose);
 }

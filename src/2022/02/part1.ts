@@ -1,20 +1,12 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-
-    let total = 0;
-    
-    // Split on empty line
-    inputFile.split(/\r?\n/).forEach((line, idx) => {
-        const val = calculateScore(line[0] as OpponentMove, line[2] as YourMove);
-        total += val;
-    
-        // console.log(`${idx}: ${val}`);
-    });
-    
-    // console.log(`Day 2, Part 1: ${total}`);
-    return total;
+export function main(input: string = `${__dirname}/input.txt`, verbose = false) {    
+    return Unown.parseInput(input, 
+        { 
+            parser: { 
+                custom: (line) => calculateScore(line[0] as OpponentMove, line[2] as YourMove) 
+            } 
+        }).reduce((a, b) => a + b);
 }
 
 //                   R  |  P  |  S

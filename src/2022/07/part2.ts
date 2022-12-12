@@ -1,8 +1,7 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-    const lines = inputFile.split(/\r?\n/);
+    const lines = Unown.parseInput(input);
 
     // Parse directory structure into an object
     const directoryStructure = parseDirectoryStructure(lines, verbose);

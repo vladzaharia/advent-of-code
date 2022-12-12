@@ -110,7 +110,7 @@ function processMonkeyMove(monkeys: Monkey[], results: number[], commonDivisor: 
         }
 
         // Relief
-        item = Math.floor(item / 3);
+        item = item % commonDivisor;
 
         if (verbose) {
             console.log(`Round ${i}, relief ${item}`);

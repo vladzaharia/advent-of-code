@@ -1,10 +1,7 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-    const lines = inputFile.split(/\r?\n/);
-
-    const grid = lines.map((l) => l.split("").map((d) => parseInt(d, 10)));
+    const grid = Unown.parseInput(input, { parser: { custom: (l) => l.split("").map((d) => parseInt(d, 10)) } });
 
     let visibleTrees = 0;
 

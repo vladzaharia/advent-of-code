@@ -1,8 +1,7 @@
-import * as fs from 'fs';
+import { Unown } from '../../util/unown';
 
 export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const inputFile = fs.readFileSync(input, 'utf-8');
-    const instructions = inputFile.split(/\r?\n/).map((l) => parseLine(l));
+    const instructions = Unown.parseInput(input, { parser: { custom: parseLine } });
 
     // Generate a nxn grid
     const gridSize = 1000;
