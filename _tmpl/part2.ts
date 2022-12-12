@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const lines = Unown.parseInput(/\r?\n/);
+    const lines = Unown.parseInput();
 
     // Do something with inputFile here
 
