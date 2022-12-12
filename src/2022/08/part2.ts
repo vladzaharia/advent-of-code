@@ -1,23 +1,21 @@
+import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const grid = Unown.parseInput<number[]>(input, { splitter: [/\r?\n/, ""], output: "number" });
+export function main() {
+    const grid = Unown.parseInput<number[]>({ splitter: [/\r?\n/, ""], output: "number" });
 
-    const distances = grid.flatMap((lines, i) => lines.map((_line, j) => getTreeScore(grid, i, j, verbose)));
+    const distances = grid.flatMap((lines, i) => lines.map((_line, j) => getTreeScore(grid, i, j)));
 
     // Return the value
     return Math.max(... distances);
 }
 
-function getTreeScore(grid: number[][], i: number, j: number, verbose = false): number {
+function getTreeScore(grid: number[][], i: number, j: number): number {
     const treeVal = grid[i][j];
 
     // Edge trees always have 0 (one side will always be 0 in a multiplication)
     if (i === 0 || j === 0 || i === grid.length - 1 || j === grid[0].length - 1) {
-        if (verbose) {
-            console.log(`${i},${j}: edge (0)`);
-        }
-
+        Missingno.log(`${i},${j}: edge (0)`);
         return 0;
     }
 
@@ -65,9 +63,6 @@ function getTreeScore(grid: number[][], i: number, j: number, verbose = false): 
         }
     }
 
-    if (verbose) {
-        console.log(`${i},${j}: ${nVal} * ${sVal} * ${eVal} * ${wVal}`);
-    }
-
+    Missingno.log(`${i},${j}: ${nVal} * ${sVal} * ${eVal} * ${wVal}`);
     return nVal * sVal * eVal * wVal;
 }

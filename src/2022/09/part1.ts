@@ -1,7 +1,8 @@
+import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const instructions = Unown.parseInput(input, { parser: parseLine });
+export function main() {
+    const instructions = Unown.parseInput({ parser: parseLine });
 
     // Generate a nxn grid
     const gridSize = 1000;
@@ -10,26 +11,20 @@ export function main(input: string = `${__dirname}/input.txt`, verbose = false) 
     let headCoords: Coordinates = { i: Math.ceil(grid.length / 2), j: Math.ceil(grid.length / 2) };
     let tailCoords: Coordinates = { i: Math.ceil(grid.length / 2), j: Math.ceil(grid.length / 2) };
 
-    if (verbose) {
-        console.log(`Starting at head ${headCoords.i},${headCoords.j}, tail ${tailCoords.i},${tailCoords.j}`);
-    }
+    Missingno.log(`Starting at head ${headCoords.i},${headCoords.j}, tail ${tailCoords.i},${tailCoords.j}`);
 
     // mark grid of start position
     markGrid(grid, tailCoords);
 
     instructions.forEach((instruction, idx) => {
-        if (verbose) {
-            console.log(`${idx}: instruction ${JSON.stringify(instruction)}, head ${headCoords.i},${headCoords.j}, tail ${tailCoords.i},${tailCoords.j}`);
-        }
+        Missingno.log(`${idx}: instruction ${JSON.stringify(instruction)}, head ${headCoords.i},${headCoords.j}, tail ${tailCoords.i},${tailCoords.j}`);
 
         for (let i = 0; i < instruction.distance; i++) {
-            headCoords = moveHead(headCoords, instruction.direction, verbose);
-            tailCoords = moveTail(tailCoords, headCoords, verbose);
-            markGrid(grid, tailCoords, verbose);
+            headCoords = moveHead(headCoords, instruction.direction);
+            tailCoords = moveTail(tailCoords, headCoords);
+            markGrid(grid, tailCoords);
 
-            if (verbose) {
-                console.log(`${idx}: Moved head to ${headCoords.i},${headCoords.j}, tail to ${tailCoords.i},${tailCoords.j}`);
-            }
+            Missingno.log(`${idx}: Moved head to ${headCoords.i},${headCoords.j}, tail to ${tailCoords.i},${tailCoords.j}`);
         }
     });
 
@@ -60,10 +55,8 @@ function parseLine(line: string): Instruction {
     };
 }
 
-function moveHead({ i, j }: Coordinates, direction: Direction, verbose = false): Coordinates {
-    if (verbose) {
-        console.log(`moveHead: head ${i},${j}, direction ${direction}`);
-    }
+function moveHead({ i, j }: Coordinates, direction: Direction): Coordinates {
+    Missingno.log(`moveHead: head ${i},${j}, direction ${direction}`);
 
     switch (direction) {
         case "U":
@@ -89,10 +82,8 @@ function moveHead({ i, j }: Coordinates, direction: Direction, verbose = false):
     }
 }
 
-function moveTail(tailCoords: Coordinates, headCoords: Coordinates, verbose = false): Coordinates {
-    if (verbose) {
-        console.log(`moveTail: tail ${JSON.stringify(tailCoords)}, head ${JSON.stringify(headCoords)}`);
-    }
+function moveTail(tailCoords: Coordinates, headCoords: Coordinates): Coordinates {
+    Missingno.log(`moveTail: tail ${JSON.stringify(tailCoords)}, head ${JSON.stringify(headCoords)}`);
 
     const tempCoords = Object.assign({}, tailCoords);
 
@@ -112,18 +103,14 @@ function moveTail(tailCoords: Coordinates, headCoords: Coordinates, verbose = fa
             tempCoords.j--;
         }
 
-        if (verbose) {
-            console.log(`moveTail: moved tail to ${JSON.stringify(tempCoords)}`);
-        }
+        Missingno.log(`moveTail: moved tail to ${JSON.stringify(tempCoords)}`);
     }
 
     return tempCoords;
 }
 
-function markGrid(grid: number[][], {i,j}: Coordinates, verbose = false) {
+function markGrid(grid: number[][], {i,j}: Coordinates) {
     grid[i][j] = grid[i][j] + 1;
 
-    if (verbose) {
-        console.log(`markGrid: set ${i},${j} to ${grid[i][j]}`);
-    }
+    Missingno.log(`markGrid: set ${i},${j} to ${grid[i][j]}`);
 }

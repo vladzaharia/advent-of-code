@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { string } from "yargs";
+import { Missingno } from "./missingno";
 
 /**
  * Unown
@@ -20,7 +20,7 @@ export module Unown {
         /**
          * How to parse each line, defaults to no parsing.
          */
-        parser?: RegExp | ((line: string) => T);
+        parser?: RegExp | ((line: any) => T);
 
         /**
          * How to output each parsed line. If not defined, will keep as string or output of `parser.custom`.
@@ -34,46 +34,86 @@ export module Unown {
         output?: "number" | "boolean";
     }
 
-    export function parseInput<T = string>(path: string, { splitter = /\r?\n/, parser, output }: LoadOptions<T> = {}): T[] {
-        const inputFile = readFileSync(path, 'utf-8');
+    export class UnownImpl<T = string> {
+        private _path: string;
+        private _options: LoadOptions<T>;
 
-        const firstSplitter = Array.isArray(splitter) ? splitter[0] : splitter;
+        public setPath(path: string) {
+            Missingno.log(`setPath: ${path}`);
 
-        let lines: any[] = inputFile.split(firstSplitter);
-
-        // Multiple splits
-        if (Array.isArray(splitter)) {
-            for (let i = 1; i < splitter.length; i++) {
-                lines = lines.map((line) => line.split(splitter[i]));
-            }
+            this._path = path;
         }
 
-        if (parser) {
-            if (typeof parser === "function") {
-                lines = lines.map((l) => execute(l, (l1) => parser(l1)));
-            
+        public setOptions(options: LoadOptions<T>) {
+            Missingno.log(`setOptions: ${JSON.stringify(options)}`);
+
+            this._options = options;
+        }
+
+        public parseInput(): T[] {
+            // Get loader options
+            const { splitter = /\r?\n/, parser, output } = this._options;
+
+            Missingno.log(`parseInput: ${this._path}, splitter ${splitter}, parser ${parser}, output ${output}`);
+
+            // First split
+            const inputFile = readFileSync(this._path, 'utf-8');
+            const firstSplitter = Array.isArray(splitter) ? splitter[0] : splitter;
+    
+            let lines: any[] = inputFile.split(firstSplitter);
+    
+            // Second split
+            if (Array.isArray(splitter)) {
+                lines = lines.map((line) => line.split(splitter[1]));
+            }
+    
+            if (parser) {
+                if (typeof parser === "function") {
+                    lines = lines.map((l) => this._execute(l, (l1) => parser(l1)));
+                
+                } else {
+                    lines = lines.map((l) => this._execute(l, (l1) => {
+                        const match = l1.match(parser);
+                        return match![1] || match![0];
+                    }));
+                }
+            }
+    
+            if (output === "number") {
+                lines = lines.map((l) => this._execute(l, (l1) => parseInt(l1, 10)));
+            } else if (output === "boolean") {
+                lines = lines.map((l) => this._execute(l, (l1) => l1 === "true"));
+            }
+    
+            return lines as T[];
+        }
+
+        private _execute(item: string|string[], fn: (l1: string) => any) {
+            if (Array.isArray(item)) {
+                return item.map(fn);
             } else {
-                lines = lines.map((l) => execute(l, (l1) => {
-                    const match = l1.match(parser);
-                    return match![1] || match![0];
-                }));
+                return fn(item);
             }
         }
 
-        if (output === "number") {
-            lines = lines.map((l) => execute(l, (l1) => parseInt(l1, 10)));
-        } else if (output === "boolean") {
-            lines = lines.map((l) => execute(l, (l1) => l1 === "true"));
+        private static _instance: UnownImpl;
+        
+        public static Instance<T>(): UnownImpl<T> {
+            if (!this._instance) {
+                this._instance = new UnownImpl();
+            }
+    
+            return this._instance as UnownImpl<T>;
         }
-
-        return lines as T[];
     }
 
-    function execute(item: string|string[], fn: (l1: string) => any) {
-        if (Array.isArray(item)) {
-            return item.map(fn);
-        } else {
-            return fn(item);
-        }
+    export function setInputFile(path: string) {
+        UnownImpl.Instance().setPath(path);
+    }
+
+    export function parseInput<T = string>(options: LoadOptions<T> = {}) {
+        const instance = UnownImpl.Instance<T>();
+        instance.setOptions(options);
+        return instance.parseInput();
     }
 }

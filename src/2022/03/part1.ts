@@ -1,15 +1,16 @@
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {    
-    return Unown.parseInput(input, {
-        parser: (line) => {
-                const cpt1 = line.slice(0, line.length / 2).split("");
-                const cpt2 = line.slice(line.length / 2).split("");
-        
-                const common = cpt1.filter((i) => cpt2.includes(i));
-                return getValue(common);
-            }
-        }).reduce((a, b) => a + b);
+export function main() {    
+    return Unown.parseInput({ parser: parseLine }).reduce((a, b) => a + b);
+}
+
+function parseLine(line: string) {
+    const cpt1 = line.slice(0, line.length / 2).split("");
+    const cpt2 = line.slice(line.length / 2).split("");
+
+    const common = cpt1.filter((i) => cpt2.includes(i));
+    return getValue(common);
+
 }
 
 function getValue(items: string[]): number {

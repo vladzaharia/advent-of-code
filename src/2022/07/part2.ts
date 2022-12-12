@@ -1,42 +1,29 @@
+import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const lines = Unown.parseInput(input);
+export function main() {
+    const lines = Unown.parseInput();
 
     // Parse directory structure into an object
-    const directoryStructure = parseDirectoryStructure(lines, verbose);
-
-    if (verbose) {
-        console.log(`Final structure: ${JSON.stringify(directoryStructure)}`)
-    }
+    const directoryStructure = parseDirectoryStructure(lines);
+    Missingno.log(`Final structure: ${JSON.stringify(directoryStructure)}`)
 
     const directorySizes = getDirectorySizes(directoryStructure, [], {});
-
-    if (verbose) {
-        console.log(`Sizes: ${JSON.stringify(directorySizes)}`)
-    }
+    Missingno.log(`Sizes: ${JSON.stringify(directorySizes)}`)
 
     const curSize = directorySizes["/"];
     const spaceNeeded = curSize - 40000000;
-
-    if (verbose) {
-        console.log(`used: ${curSize}, needed: ${spaceNeeded}`);
-    }
+    Missingno.log(`used: ${curSize}, needed: ${spaceNeeded}`);
 
     const dirsOverSpaceNeeded = Object.values(directorySizes).filter((s) => s > spaceNeeded);
-
-    if (verbose) {
-        console.log(`Sizes > needed: ${dirsOverSpaceNeeded}`)
-    }
+    Missingno.log(`Sizes > needed: ${dirsOverSpaceNeeded}`)
 
     // Return the value
     return dirsOverSpaceNeeded.sort((a, b) => a - b)[0];
 }
 
-function parseDirectoryStructure(lines: string[], verbose = false) {
-    if (verbose) {
-        console.log(`parseDirectoryStructure: ${lines}`)
-    }
+function parseDirectoryStructure(lines: string[]) {
+    Missingno.log(`parseDirectoryStructure: ${lines}`)
 
     const directoryStructure: Folder = { "/": {} };
     const pwd: string[] = [];
@@ -56,47 +43,37 @@ function parseDirectoryStructure(lines: string[], verbose = false) {
                     pwd.push(dest);
                 }
 
-                if (verbose) {
-                    console.log(`cd: ${pwd.slice(0,-1)} -> ${pwd}`)
-                }
-            } else { 
+                Missingno.log(`cd: ${pwd.slice(0,-1)} -> ${pwd}`)
+            } else {
                 // ls, nop
-                if (verbose) {
-                    console.log(`ls: ${pwd}`)
-                }
+                Missingno.log(`ls: ${pwd}`)
             }
         } else if (line.startsWith("dir")) {
             const match = line.match(/dir (.*)/);
             const dir = match![1];
 
-            if (verbose) {
-                console.log(`dir: ${dir}`)
-            }
+            Missingno.log(`dir: ${dir}`)
 
-            addToStructure(directoryStructure, pwd, dir, {}, verbose);
+            addToStructure(directoryStructure, pwd, dir, {});
         } else {
             const match = line.match(/(\d+) (.*)/);
             const size = match![1];
             const file = match![2];
 
-            if (verbose) {
-                console.log(`file: ${file}, ${size}`)
-            }
+            Missingno.log(`file: ${file}, ${size}`)
 
-            addToStructure(directoryStructure, pwd, file, parseInt(size, 10), verbose);
+            addToStructure(directoryStructure, pwd, file, parseInt(size, 10));
         }
     }
 
     return directoryStructure;
 }
 
-function addToStructure(structure: Folder, path: string[], name: string, item: File | Folder, verbose = false) {
+function addToStructure(structure: Folder, path: string[], name: string, item: File | Folder) {
     let curDir: Folder = structure;
 
     for (const hop of path) {
-        if (verbose) {
-            console.log(`hopping to ${hop}`);
-        }
+        Missingno.log(`hopping to ${hop}`);
 
         if (!curDir[hop]) {
             throw new Error(`Can't complete hop to ${hop}!`);
@@ -105,9 +82,7 @@ function addToStructure(structure: Folder, path: string[], name: string, item: F
         curDir = curDir[hop] as Folder;
     }
 
-    if (verbose) {
-        console.log(`adding ${name}:${JSON.stringify(item)} to ${JSON.stringify(curDir)}`);
-    }
+    Missingno.log(`adding ${name}:${JSON.stringify(item)} to ${JSON.stringify(curDir)}`);
     curDir[name] = item;
 
     return structure;

@@ -1,10 +1,10 @@
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
+export function main() {
     let max = 0;
     
     // Split on two empty lines
-    Unown.parseInput<number[]>(input, 
+    Unown.parseInput<number[]>(
         { 
             splitter: [/\r?\n\r?\n/, /\r?\n/], 
             output: "number" 

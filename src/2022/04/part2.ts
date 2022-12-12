@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    return Unown.parseInput<number>(input, {
+export function main() {
+    return Unown.parseInput<number>({
         parser: (line) => {
                 const assignments = line.split(",");
 

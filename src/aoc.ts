@@ -7,6 +7,7 @@ import axios from "axios";
 import { Lotad } from './util/lotad';
 import { Exeggutor } from './util/exeggutor';
 import { Spectrier } from './util/spectrier';
+import { Missingno } from "./util/missingno";
 
 /**
  * Common arguments used across commands.
@@ -58,14 +59,15 @@ const argv = yargs
 
 // Enable verbose logging
 if (argv.verbose) {
-    console.info("\x1b[1m\x1b[36m[!] Verbose mode on.\x1b[0m");
-    console.log(JSON.stringify(argv));
+    Missingno.setVerbose();
+    Missingno.log("\x1b[1m\x1b[36m[!] Verbose mode on.\x1b[0m");
+    Missingno.log(JSON.stringify(argv));
 }
 
 // Determine advent files to run/test
-let scripts: Exeggutor.Script[] = Lotad.getAllScripts(__dirname, argv.verbose);
+let scripts: Exeggutor.Script[] = Lotad.getAllScripts(__dirname);
 if (argv.path) {
-    scripts = [Exeggutor.createScriptFromPath(argv.path, argv.verbose)!];
+    scripts = [Exeggutor.createScriptFromPath(argv.path)!];
 } else {
     if (argv.year) {
         scripts = scripts.filter((f) => f.year === argv.year);
@@ -88,7 +90,7 @@ if (scripts.length === 0) {
 if (argv['_'][0] === "bootstrap") {
     Lotad.bootstrap(scripts);
 } else if (argv['_'][0] === "test") {
-    Spectrier.executeTests(scripts, argv.verbose);
+    Spectrier.executeTests(scripts);
 } else {
-    Exeggutor.executeScripts(scripts, argv.verbose);
+    Exeggutor.executeScripts(scripts);
 }

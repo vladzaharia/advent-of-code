@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`) {    
-    const allNumbers = Unown.parseInput<number[]>(input, 
+export function main() {    
+    const allNumbers = Unown.parseInput<number[]>(
         { 
             splitter: [/\r?\n\r?\n/, /\r?\n/], 
             output: "number" 

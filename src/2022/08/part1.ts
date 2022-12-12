@@ -1,7 +1,8 @@
+import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const grid = Unown.parseInput<number[]>(input, { splitter: [/\r?\n/, ""], output: "number" });
+export function main() {
+    const grid = Unown.parseInput<number[]>({ splitter: [/\r?\n/, ""], output: "number" });
 
     let visibleTrees = 0;
 
@@ -16,9 +17,7 @@ mainLoop:
 
             // Edge trees are always visible
             if (i === 0 || j === 0 || i === grid.length - 1 || j === line.length - 1) {
-                if (verbose) {
-                    console.log(`${i},${j}: edge`);
-                }
+                Missingno.log(`${i},${j}: edge`);
 
                 visibleTrees++;
                 continue mainLoop;
@@ -30,16 +29,12 @@ mainLoop:
                 trees.push(grid[i1][j]);
             }
             if (trees.every((t) => t < tree)) {
-                if (verbose) {
-                    console.log(`${i},${j}: N VISIBLE [${trees}] < ${tree}`);
-                }
+                Missingno.log(`${i},${j}: N VISIBLE [${trees}] < ${tree}`);
 
                 visibleTrees++;
                 continue mainLoop;
             } else {
-                if (verbose) {
-                    console.log(`${i},${j}: N [${trees}] > ${tree}`);
-                }
+                Missingno.log(`${i},${j}: N [${trees}] > ${tree}`);
             }
 
             // Determine if there's any trees south of here
@@ -48,16 +43,12 @@ mainLoop:
                 trees.push(grid[i1][j]);
             }
             if (trees.every((t) => t < tree)) {
-                if (verbose) {
-                    console.log(`${i},${j}: S VISIBLE [${trees}] < ${tree}`);
-                }
+                Missingno.log(`${i},${j}: S VISIBLE [${trees}] < ${tree}`);
 
                 visibleTrees++;
                 continue mainLoop;
             } else {
-                if (verbose) {
-                    console.log(`${i},${j}: S [${trees}] > ${tree}`);
-                }
+                Missingno.log(`${i},${j}: S [${trees}] > ${tree}`);
             }
 
             // Determine if there's any trees east of here
@@ -66,16 +57,12 @@ mainLoop:
                 trees.push(grid[i][j1]);
             }
             if (trees.every((t) => t < tree)) {
-                if (verbose) {
-                    console.log(`${i},${j}: E VISIBLE [${trees}] < ${tree}`);
-                }
+                Missingno.log(`${i},${j}: E VISIBLE [${trees}] < ${tree}`);
 
                 visibleTrees++;
                 continue mainLoop;
             } else {
-                if (verbose) {
-                    console.log(`${i},${j}: E [${trees}] > ${tree}`);
-                }
+                Missingno.log(`${i},${j}: E [${trees}] > ${tree}`);
             }
 
             // Determine if there's any trees west of here
@@ -84,15 +71,11 @@ mainLoop:
                 trees.push(grid[i][j1]);
             }
             if (trees.every((t) => t < tree)) {
-                if (verbose) {
-                    console.log(`${i},${j}: W VISIBLE [${trees}] < ${tree}`);
-                }
+                Missingno.log(`${i},${j}: W VISIBLE [${trees}] < ${tree}`);
 
                 visibleTrees++;
             } else {
-                if (verbose) {
-                    console.log(`${i},${j}: W [${trees}] > ${tree}`);
-                }
+                Missingno.log(`${i},${j}: W [${trees}] > ${tree}`);
             }
         }
     }

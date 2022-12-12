@@ -1,7 +1,8 @@
+import { Missingno } from "../../util/missingno";
 import { Unown } from "../../util/unown";
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const lines = Unown.parseInput(input);
+export function main() {
+    const lines = Unown.parseInput();
 
     // Contain the resulting CRT display
     const result: string[] = [];
@@ -17,24 +18,15 @@ export function main(input: string = `${__dirname}/input.txt`, verbose = false) 
     for (let i = 1; i <= 240; i++) {
         const spritePos = [regX - 1, regX, regX + 1];
         const pixel = (i%40);
-
-        if (verbose) {
-            console.log(`cycle ${i}/ pixel ${pixel}: sprite at ${spritePos}`);    
-        }
+        Missingno.log(`cycle ${i}/ pixel ${pixel}: sprite at ${spritePos}`);    
 
         // Add to current line
         if (spritePos.includes(pixel)) {
             currentLine += "█";
-
-            if (verbose) {
-                console.log(`cycle ${i}/ pixel ${pixel}: adding █, line ${currentLine}`);    
-            }
+            Missingno.log(`cycle ${i}/ pixel ${pixel}: adding █, line ${currentLine}`);    
         } else {
             currentLine += ".";
-
-            if (verbose) {
-                console.log(`cycle ${i}/ pixel ${pixel}: adding ., line ${currentLine}`);    
-            }
+            Missingno.log(`cycle ${i}/ pixel ${pixel}: adding ., line ${currentLine}`);    
         }
 
         // Push current line and reset
@@ -45,19 +37,14 @@ export function main(input: string = `${__dirname}/input.txt`, verbose = false) 
 
         // Execute current cycle's op
         if (midAdd) {
-            if (verbose) {
-                console.log(`cycle ${i}/ pixel ${pixel}: adding ${midAdd} to ${regX}`);    
-            }
+            Missingno.log(`cycle ${i}/ pixel ${pixel}: adding ${midAdd} to ${regX}`);    
 
             regX += midAdd;
             midAdd = false;
         } else {
             // Grab a line, parse it, and run an op
             const line = lines.splice(0, 1)[0];
-
-            if (verbose) {
-                console.log(`cycle ${i}/ pixel ${pixel}: ${line}`);
-            }
+            Missingno.log(`cycle ${i}/ pixel ${pixel}: ${line}`);
 
             if (line !== "noop") {
                 midAdd = parseInt(line.split(" ")[1], 10);

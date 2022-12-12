@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { Exeggutor } from "./exeggutor";
+import { Missingno } from "./missingno";
 
 /**
  * Spectrier
@@ -23,12 +24,12 @@ export module Spectrier {
         text: string;
     }
     
-    export async function executeTests(scripts: Exeggutor.Script[], verbose = false) {
+    export async function executeTests(scripts: Exeggutor.Script[]) {
         const results: TestRun[] = [];
     
         // Run tests
         for (const file of scripts) {
-            const res = await executeTest(file, verbose);
+            const res = await executeTest(file);
             results.push(res);
         }
     
@@ -39,11 +40,11 @@ export module Spectrier {
         }
     }
     
-    async function executeTest(script: Exeggutor.Script, verbose = false): Promise<TestRun> {
-        const testFile = getTestForAdventFile(script, verbose);
+    async function executeTest(script: Exeggutor.Script): Promise<TestRun> {
+        const testFile = getTestForAdventFile(script);
     
         if (testFile) {
-            const result = await Exeggutor.executeScript(testFile.script, testFile.input, verbose);
+            const result = await Exeggutor.executeScript(testFile.script, testFile.input);
             const expected = readFileSync(testFile.output, 'utf-8');
     
             const status = result == expected;
@@ -71,10 +72,8 @@ export module Spectrier {
         }
     }
     
-    function getTestForAdventFile(script: Exeggutor.Script, verbose = false): AdventFileTest | undefined {
-        if (verbose) {
-            console.log(`getTestForAdventFile: ${JSON.stringify(script)}`);
-        }
+    function getTestForAdventFile(script: Exeggutor.Script): AdventFileTest | undefined {
+        Missingno.log(`getTestForAdventFile: ${JSON.stringify(script)}`);
     
         const fileBase = script.path?.replace(".ts", "");
         const input = script.path!.replace(`part${script.part}.ts`, "input.spec");

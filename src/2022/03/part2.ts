@@ -1,10 +1,10 @@
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
+export function main() {
     let total = 0;
     
     // Split on empty lines
-    const lines = Unown.parseInput<string[]>(input, { splitter: [/\r?\n/, ""] });
+    const lines = Unown.parseInput<string[]>({ splitter: [/\r?\n/, ""] });
 
     for (let i = 0; i < lines.length; i+=3) {
         const grp1 = lines[i+0];

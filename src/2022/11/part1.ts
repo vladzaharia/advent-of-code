@@ -1,9 +1,10 @@
+import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
-export function main(input: string = `${__dirname}/input.txt`, verbose = false) {
-    const lines = Unown.parseInput<string[]>(input, { splitter: [/\r?\n\r?\n/, /\r?\n/] });
-
-    const monkeys = lines.map((monkeyLines) => createMonkey(monkeyLines, verbose));
+export function main() {
+    const monkeys = Unown.parseInput<string[]>({ 
+        splitter: [/\r?\n\r?\n/, /\r?\n/], 
+    }).map((monkeyLines) => createMonkey(monkeyLines));
 
     const results = Array<number>(monkeys.length).fill(0);
 
@@ -25,35 +26,26 @@ interface Monkey {
     falseMonkey: number;
 }
 
-function createMonkey(lines: string[], verbose = false): Monkey {
+function createMonkey(lines: string[]): Monkey {
     // Starting items: 79, 98
     const itemLine = lines[1];
     const items = itemLine.split(": ")[1].split(", ").map((i) => parseInt(i, 10));
-
-    if (verbose) {
-        console.log(`createMonkey: items ${items}`);
-    }
+    Missingno.log(`createMonkey: items ${items}`);
 
     // Operation: new = old * 19
-    const operation = parseOperation(lines[2], verbose);
+    const operation = parseOperation(lines[2]);
 
     // Test: divisible by 23
     const testDivisor = parseInt(lines[3].split(" by ")[1], 10);
     const test = (t: number) => t % testDivisor === 0;
-
-    if (verbose) {
-        console.log(`createMonkey: test (t % ${testDivisor}) === 0`);
-    }    
+    Missingno.log(`createMonkey: test (t % ${testDivisor}) === 0`);
 
     // If true: throw to monkey 2
     const trueMonkey = parseInt(lines[4].split(" monkey ")[1], 10);
 
     // If false: throw to monkey 3
     const falseMonkey = parseInt(lines[5].split(" monkey ")[1], 10);
-
-    if (verbose) {
-        console.log(`createMonkey: if true ${trueMonkey}, if false ${falseMonkey}`);
-    }
+    Missingno.log(`createMonkey: if true ${trueMonkey}, if false ${falseMonkey}`);
 
     return {
         items,
@@ -67,7 +59,7 @@ function createMonkey(lines: string[], verbose = false): Monkey {
 type ItemOperations = "*" | "+";
 type ItemParam = "old" | number;
 
-function parseOperation(line: string, verbose = false): (old: number) => number {
+function parseOperation(line: string): (old: number) => number {
     // Operation: new = old * 19
     // Operation: new = old * old
     // Operation: new = old + 6
@@ -77,9 +69,7 @@ function parseOperation(line: string, verbose = false): (old: number) => number 
     const paramString = operationLine[1];
     const param: ItemParam = paramString !== "old" ? parseInt(paramString, 10) : paramString;
     
-    if (verbose) {
-        console.log(`parseOperation: new = old ${op} ${param}`);
-    }
+    Missingno.log(`parseOperation: new = old ${op} ${param}`);
 
     switch(op) {
         case "+":
@@ -89,50 +79,32 @@ function parseOperation(line: string, verbose = false): (old: number) => number 
     }
 }
 
-function processMonkeyMove(monkeys: Monkey[], results: number[], m: number, i: number, verbose = false) {
+function processMonkeyMove(monkeys: Monkey[], results: number[], m: number, i: number) {
     const monkey = monkeys[m];
 
     for (let item of monkey.items) {
         results[m]++;
-
-        if (verbose) {
-            console.log(`Round ${i}, item ${item}`);
-        }
+        Missingno.log(`Round ${i}, item ${item}`);
         
         // Monkey inspects item
         item = monkey.operation(item);
-
-        if (verbose) {
-            console.log(`Round ${i}, inspected ${item}`);
-        }
+        Missingno.log(`Round ${i}, inspected ${item}`);
 
         // Relief
         item = Math.floor(item / 3);
-
-        if (verbose) {
-            console.log(`Round ${i}, relief ${item}`);
-        }
+        Missingno.log(`Round ${i}, relief ${item}`);
 
         // Monkey tests
         const testResult = monkey.test(item);
-
-        if (verbose) {
-            console.log(`Round ${i}, test result ${item}`);
-        }
+        Missingno.log(`Round ${i}, test result ${item}`);
 
         // Monkey throws
         if (testResult) {
             monkeys[monkey.trueMonkey].items.push(item);
-
-            if (verbose) {
-                console.log(`Round ${i}, throwing ${item} to ${monkey.trueMonkey}`);
-            }
+            Missingno.log(`Round ${i}, throwing ${item} to ${monkey.trueMonkey}`);
         } else {
             monkeys[monkey.falseMonkey].items.push(item);
-
-            if (verbose) {
-                console.log(`Round ${i}, throwing ${item} to ${monkey.falseMonkey}`);
-            }
+            Missingno.log(`Round ${i}, throwing ${item} to ${monkey.falseMonkey}`);
         }
     }
 

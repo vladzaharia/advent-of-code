@@ -2,6 +2,7 @@ import axios from 'axios';
 import { readdirSync, writeFileSync } from 'fs';
 import { copySync } from 'fs-extra';
 import { Exeggutor } from './exeggutor';
+import { Missingno } from './missingno';
 
 /**
  * Lotad
@@ -40,20 +41,16 @@ export module Lotad {
         })
     }
 
-    export function getAllScripts(base: string, verbose = false): Exeggutor.Script[] {
-        if (verbose) {
-            console.log(`getAllScripts: ${base}`);
-        }
+    export function getAllScripts(base: string): Exeggutor.Script[] {
+        Missingno.log(`getAllScripts: ${base}`);
         
         return getSubDirectories(base)
             .flatMap((d) => getSubDirectories(`${base}/${d}`).map((dir) => `${d}/${dir}`))
-            .flatMap((d) => getScriptsToRun(base, d, verbose), verbose);
+            .flatMap((d) => getScriptsToRun(base, d));
     }
     
-    function getSubDirectories(base: string, verbose = false): string[] {
-        if (verbose) {
-            console.log(`getAllScripts: ${base}`);
-        }
+    function getSubDirectories(base: string): string[] {
+        Missingno.log(`getAllScripts: ${base}`);
     
         return readdirSync(base, { withFileTypes: true })
             .filter(dirent => dirent.isDirectory())
@@ -61,15 +58,13 @@ export module Lotad {
             .filter(dir => !dir.includes("util"));
     }
     
-    function getScriptsToRun(base: string, scriptsFolder: string, verbose = false): Exeggutor.Script[] {
-        if (verbose) {
-            console.log(`getScriptsToRun: ${base}/${scriptsFolder}`);
-        }
+    function getScriptsToRun(base: string, scriptsFolder: string): Exeggutor.Script[] {
+        Missingno.log(`getScriptsToRun: ${base}/${scriptsFolder}`);
     
         const files = readdirSync(`${base}/${scriptsFolder}`).filter((f) => f.match(/part\d\.ts/));
     
         return files.map((file) => {
-            return Exeggutor.createScriptFromPath(`${base}/${scriptsFolder}/${file}`, verbose);
+            return Exeggutor.createScriptFromPath(`${base}/${scriptsFolder}/${file}`);
         });
     }
 }
