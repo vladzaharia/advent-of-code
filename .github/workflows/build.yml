@@ -20,11 +20,20 @@ jobs:
       year: ${{ matrix.aoc-year }}
       days: ${{ steps.generate-matrix.outputs.days }}
     steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'npm'
+      - run: npm ci
       - name: Generate day matrix for ${{ matrix.aoc-year }}
         id: generate-matrix
         run: |
           DAYS=(node --loader ts-node/esm.mjs --require ./src/_remove_warnings.cjs ./src/aoc.ts list -y ${{ matrix.aoc-year }})
-          echo ::set-output name=days::${DAYS}
+          echo "days=${DAYS}" >> $GITHUB_OUTPUT
+      - name: Echo output of generate-matrix
+        run: echo "${{ toJSON(generate-matrix.outputs) }}"
 
   build:
     runs-on: ubuntu-latest
