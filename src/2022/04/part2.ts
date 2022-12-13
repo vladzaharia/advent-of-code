@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import { Unown } from '../../util/unown';
 
 export function main() {

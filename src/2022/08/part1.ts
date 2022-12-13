@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const grid = Unown.parseInput<number[]>({ splitter: [/\r?\n/, ""], output: "number" });
+    const grid = Unown.parseInput<number[]>({ splitter: [Unown.ONE_LINE, ""], output: "number" });
 
     let visibleTrees = 0;
 
