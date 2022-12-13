@@ -41,7 +41,7 @@ jobs:
 
     strategy:
       matrix:
-        aoc-year: [2022]
+        aoc-year: ['${{ fromJSON(needs.get-days.outputs.year) }}']
         aoc-day:  ${{ fromJSON(needs.get-days.outputs.days) }}
 
     steps:
