@@ -1,8 +1,7 @@
-#!/usr/bin/env node --loader ts-node/esm.mjs
+#!/usr/bin/env node --loader ts-node/esm.mjs --require ./src/_remove_warnings.cjs
+process.removeAllListeners('warning');
 
 import yargs, { Argv, Arguments, CamelCaseKey } from "yargs";
-import { copySync, writeFileSync } from 'fs-extra';
-import axios from "axios";
 
 import { Lotad } from './util/lotad';
 import { Exeggutor } from './util/exeggutor';
@@ -22,29 +21,39 @@ interface RunnerArgs {
 /**
  * Basic `yargs` options used across commands.
  */
+const yearOption = (yargs: Argv, required = false) => {
+    const option = yargs.option('year', {
+        describe: "The year of AoC to filter down to",
+        type: 'number',
+        alias: 'y',
+        conflicts: ['path'],
+    });
+
+    if (required) {
+        option.demandOption("year");
+    }
+
+    return option;
+};
+
 const baseOptions = (yargs: Argv) => {
-    return yargs.option('path', {
-        describe: "Full path to run",
+    return yearOption(yargs).option('path', {
+        describe: "Full path to filter down to",
         type: 'string',
         alias: 'p',
         conflicts: ['day', 'part']
-    }).option('year', {
-        describe: "The year of AoC to run",
-        type: 'number',
-        alias: 'y',
-        conflicts: ['path']
     }).option('day', {
-        describe: "The day of AoC to run",
+        describe: "The day of AoC to filter down to",
         type: 'number',
         alias: 'd',
         conflicts: ['path']
     }).option('part', {
-        describe: "The part to run",
+        describe: "The part to filter down to",
         type: 'number',
         alias: 'n',
         conflicts: ['path']
     }).option('verbose', {
-        describe: "Verbose logging",
+        describe: "Enable Missingno console logging",
         type: 'boolean',
         alias: ['v', 'V']
     }).help()
@@ -53,9 +62,12 @@ const baseOptions = (yargs: Argv) => {
 // Create run and test commands
 const argv = yargs
     .command('bootstrap', "Bootstraps the next day's scripts, input and spec files.")
-    .command('$0 [path]', "Run Advent of Code 2022 scripts. By default, will run all scripts in src.", baseOptions)
+    .command('list', "List all script days available.", (yargs) => yearOption(yargs, true))
+    .command('$0 [path]', "Run Advent of Code scripts. By default, will run all scripts in src.", baseOptions)
     .command('test [path]', "Run tests for AoC scripts.", baseOptions)
     .argv as { [key in keyof Arguments<RunnerArgs> as key | CamelCaseKey<key>]: Arguments<RunnerArgs>[key] };
+
+const command = argv['_'][0];
 
 // Enable verbose logging
 if (argv.verbose) {
@@ -87,9 +99,12 @@ if (scripts.length === 0) {
 }
 
 // Execute action
-if (argv['_'][0] === "bootstrap") {
+if (command === "bootstrap") {
     Lotad.bootstrap(scripts);
-} else if (argv['_'][0] === "test") {
+} else if (command === "list") {
+    const days = scripts.map((s) => s.day);
+    console.log(JSON.stringify(days.filter((a, i) => days.indexOf(a) === i)));
+} else if (command === "test") {
     Spectrier.executeTests(scripts);
 } else {
     Exeggutor.executeScripts(scripts);

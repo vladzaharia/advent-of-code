@@ -10,10 +10,24 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  get_days:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        aoc-year: [2022]
 
+    outputs:
+      year: ${{ matrix.aoc-year }}
+      days: ${{ steps.generate-matrix.outputs.days }}
+    steps:
+      - name: Generate day matrix for ${{ matrix.aoc-year }}
+        id: generate-matrix
+        run: |
+          DAYS=(node --loader ts-node/esm.mjs --require ./src/_remove_warnings.cjs ./src/aoc.ts list -y ${{ matrix.aoc-year }})
+          echo ::set-output name=days::${DAYS}
+
+  build:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         aoc-year: [2022]
