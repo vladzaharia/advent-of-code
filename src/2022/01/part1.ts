@@ -6,7 +6,7 @@ export function main() {
     // Split on two empty lines
     Unown.parseInput<number[]>(
         { 
-            splitter: [/\r?\n\r?\n/, /\r?\n/], 
+            splitter: [Unown.TWO_LINES, Unown.ONE_LINE], 
             output: "number" 
         }).forEach((numbers, idx) => {
         let total = numbers.reduce((a, b) => a + b);

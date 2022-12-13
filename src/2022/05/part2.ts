@@ -4,12 +4,12 @@ export function main() {
     let total = 0;
     
     // Split on 2 empty lines
-    const fileParts = Unown.parseInput({ splitter: /\r?\n\r?\n/ });
+    const fileParts = Unown.parseInput({ splitter: Unown.TWO_LINES });
 
-    const stackLines = fileParts[0].split(/\r?\n/).slice(0,-1);
+    const stackLines = fileParts[0].split(Unown.ONE_LINE).slice(0,-1);
     const stacks = parseStacks(stackLines);
 
-    const instructionLines = fileParts[1].split(/\r?\n/);
+    const instructionLines = fileParts[1].split(Unown.ONE_LINE);
     runInstructions(stacks, instructionLines);
     
     // console.log(`Day 5, Part 2: ${stacks.map((s) => s[0]).join("")}`);
