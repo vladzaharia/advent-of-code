@@ -56,7 +56,8 @@ export module Spectrier {
                     status: true,
                     text: `\x1b[1m\x1b[33mSKIPPED\x1b[0m`
                 };
-            } else if (result === expected) {
+            // == on purpose
+            } else if (result == expected) {
                 text = `\x1b[1m\x1b[32mSUCCESS\x1b[0m => ${result} = ${expected}`
             } else {
                 text = `\x1b[1m\x1b[31mFAILED\x1b[0m => ${result} != ${expected}`
