@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const packets = Unown.parseInput(__filename, ).filter((l) => l !== "").map((l) => JSON.parse(l));
+    const packets = Unown.parseInput(__filename).filter((l) => l !== "").map((l) => JSON.parse(l));
 
     // Add additional packets
     packets.push([[2]]);
