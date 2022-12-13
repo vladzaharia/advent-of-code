@@ -63,7 +63,7 @@ export module Unown {
             const inputFile = readFileSync(this._path, 'utf-8');
             const firstSplitter = Array.isArray(splitter) ? splitter[0] : splitter;
     
-            let lines: any[] = inputFile.split(firstSplitter);
+            let lines: any[] = inputFile.replace(/\n$/, "").split(firstSplitter);
     
             // Second split
             if (Array.isArray(splitter)) {

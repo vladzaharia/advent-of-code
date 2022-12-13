@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { readdirSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, writeFileSync } from 'fs';
 import { copySync } from 'fs-extra';
 import { Exeggutor } from './exeggutor';
 import { Missingno } from './missingno';
@@ -62,7 +62,7 @@ export module Lotad {
         Missingno.log(`getScriptsToRun: ${base}/${scriptsFolder}`);
     
         const files = readdirSync(`${base}/${scriptsFolder}`).filter((f) => f.match(/part\d\.ts/));
-    
+            
         return files.map((file) => {
             return Exeggutor.createScriptFromPath(`${base}/${scriptsFolder}/${file}`);
         });
