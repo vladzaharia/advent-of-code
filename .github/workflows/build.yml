@@ -28,7 +28,7 @@ jobs:
     - run: npm ci
 
     - name: Run scripts for ${{ matrix.aoc-year }}
-      run: node --loader ts-node/esm.mjs ./src/aoc.ts -y ${{ matrix.aoc-year }}
+      run: node --loader ts-node/esm.mjs ./src/aoc.ts -y ${{ matrix.aoc-year }} -V
 
     - name: Run tests for ${{ matrix.aoc-year }}
       run: node --loader ts-node/esm.mjs ./src/aoc.ts test -y ${{ matrix.aoc-year }}
