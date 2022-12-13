@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
 export function main() {    
-    return Unown.parseInput({ parser: parseLine }).reduce((a, b) => a + b);
+    return Unown.parseInput(__filename, { parser: parseLine }).reduce((a, b) => a + b);
 }
 
 function parseLine(line: string) {

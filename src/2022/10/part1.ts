@@ -1,7 +1,7 @@
 import { Unown } from "../../util/unown";
 
 export function main() {
-    const lines = Unown.parseInput();
+    const lines = Unown.parseInput(__filename, );
 
     let total = 0;
 

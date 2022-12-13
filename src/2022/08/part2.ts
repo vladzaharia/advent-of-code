@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const grid = Unown.parseInput<number[]>({ splitter: [Unown.ONE_LINE, ""], output: "number" });
+    const grid = Unown.parseInput<number[]>(__filename, { splitter: [Unown.ONE_LINE, ""], output: "number" });
 
     const distances = grid.flatMap((lines, i) => lines.map((_line, j) => getTreeScore(grid, i, j)));
 

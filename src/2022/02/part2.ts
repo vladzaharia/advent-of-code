@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
 export function main() {
-    return Unown.parseInput({ 
+    return Unown.parseInput(__filename, { 
         parser: (line) => calculateScore(line[0] as OpponentMove, line[2] as YourMove) 
     }).reduce((a, b) => a + b);
 }

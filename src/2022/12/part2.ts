@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const grid = Unown.parseInput<string[]>({ splitter: [ Unown.ONE_LINE, "" ] })
+    const grid = Unown.parseInput<string[]>(__filename, { splitter: [ Unown.ONE_LINE, "" ] })
         .map((line, i) => line.map((val, j) => createNode(val, i, j)));
     
     const start = findPoints(grid, "a");
@@ -11,11 +11,10 @@ export function main() {
     const results = start.map((s, idx) => {
         s.distance = 0;
 
-        const newGrid = Unown.parseInput<string[]>({ splitter: [ Unown.ONE_LINE, "" ] })
+        const newGrid = Unown.parseInput<string[]>(__filename, { splitter: [ Unown.ONE_LINE, "" ] })
             .map((line, i) => line.map((val, j) => createNode(val, i, j, s)));
 
         const result = findRoute(newGrid, s, end);
-        console.log(`${idx}/${start.length} => ${result}`);
 
         return result === -1 ? Infinity : result;
     });

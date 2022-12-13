@@ -2,7 +2,7 @@ import { Missingno } from "../../util/missingno";
 import { Unown } from "../../util/unown";
 
 export function main() {
-    const lines = Unown.parseInput();
+    const lines = Unown.parseInput(__filename, );
 
     // Contain the resulting CRT display
     const result: string[] = [];

@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const instructions = Unown.parseInput({ parser: parseLine });
+    const instructions = Unown.parseInput(__filename, { parser: parseLine });
 
     // Generate a nxn grid
     const gridSize = 1000;

@@ -4,7 +4,7 @@ export function main() {
     let max = 0;
     
     // Split on two empty lines
-    Unown.parseInput<number[]>(
+    Unown.parseInput<number[]>(__filename, 
         { 
             splitter: [Unown.TWO_LINES, Unown.ONE_LINE], 
             output: "number" 

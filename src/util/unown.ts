@@ -99,23 +99,23 @@ export module Unown {
             }
         }
 
-        private static _instance: UnownImpl;
+        private static _instances: {[key: string]: UnownImpl} = {};
         
-        public static Instance<T>(): UnownImpl<T> {
-            if (!this._instance) {
-                this._instance = new UnownImpl();
+        public static Instance<T>(scriptPath: string): UnownImpl<T> {
+            if (!this._instances[scriptPath]) {
+                this._instances[scriptPath] = new UnownImpl();
             }
     
-            return this._instance as UnownImpl<T>;
+            return this._instances[scriptPath] as UnownImpl<T>;
         }
     }
 
-    export function setInputFile(path: string) {
-        UnownImpl.Instance().setPath(path);
+    export function setInputFile(scriptPath: string, path: string) {
+        UnownImpl.Instance(scriptPath).setPath(path);
     }
 
-    export function parseInput<T = string>(options: LoadOptions<T> = {}) {
-        const instance = UnownImpl.Instance<T>();
+    export function parseInput<T = string>(scriptPath: string, options: LoadOptions<T> = {}) {
+        const instance = UnownImpl.Instance<T>(scriptPath);
         instance.setOptions(options);
         return instance.parseInput();
     }

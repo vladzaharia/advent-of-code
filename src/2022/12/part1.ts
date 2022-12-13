@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const grid = Unown.parseInput<string[]>({ splitter: [ Unown.ONE_LINE, "" ] })
+    const grid = Unown.parseInput<string[]>(__filename, { splitter: [ Unown.ONE_LINE, "" ] })
         .map((line, i) => line.map((val, j) => createNode(val, i, j)));
     
     const start = findPoint(grid, "S")!;

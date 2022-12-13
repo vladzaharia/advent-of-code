@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
 export function main() {
-    return Unown.parseInput<number>({
+    return Unown.parseInput<number>(__filename, {
         parser: (line) => {
                 const assignments = line.split(",");
 

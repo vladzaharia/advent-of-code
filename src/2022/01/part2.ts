@@ -1,7 +1,7 @@
 import { Unown } from '../../util/unown';
 
 export function main() {    
-    const allNumbers = Unown.parseInput<number[]>(
+    const allNumbers = Unown.parseInput<number[]>(__filename, 
         { 
             splitter: [Unown.TWO_LINES, Unown.ONE_LINE], 
             output: "number" 

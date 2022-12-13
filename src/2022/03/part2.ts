@@ -4,7 +4,7 @@ export function main() {
     let total = 0;
     
     // Split on empty lines
-    const lines = Unown.parseInput<string[]>({ splitter: [Unown.ONE_LINE, ""] });
+    const lines = Unown.parseInput<string[]>(__filename, { splitter: [Unown.ONE_LINE, ""] });
 
     for (let i = 0; i < lines.length; i+=3) {
         const grp1 = lines[i+0];

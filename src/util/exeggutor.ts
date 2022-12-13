@@ -20,23 +20,18 @@ export module Exeggutor {
     export async function executeScripts(scripts: Script[]) {
         Missingno.log(`executeScripts: ${JSON.stringify(scripts)}`);
     
-        scripts.forEach(async (f) => console.log(`${f.year}/${f.day} part${f.part}: ${await executeScript(f, undefined)}`));
+        scripts.filter((s) => !s.skip).forEach(async (f) => console.log(`${f.year}/${f.day} part${f.part}: ${await executeScript(f, undefined)}`));
     }
     
-    export async function executeScript({ path, skip }: Script, inputFile?: string) {    
+    export async function executeScript({ path, skip }: Script, inputFile?: string) {
         Missingno.log(`executeScript: ${path}`);
-
-        if (skip) {
-            Missingno.log(`${path} marked as skipped`);
-            return;
-        }
 
         // Set input file
         if (!inputFile) {
             inputFile = path.replace("part1.ts", "input.txt").replace("part2.ts", "input.txt");
         }
         Missingno.log(`Setting input file to ${inputFile}`);
-        Unown.setInputFile(inputFile);
+        Unown.setInputFile(path, inputFile);
         
         const module = await import(path);
         return module.main(inputFile);

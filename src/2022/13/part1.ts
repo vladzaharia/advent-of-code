@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const pairs = Unown.parseInput({ splitter: Unown.TWO_LINES, parser: createPair });
+    const pairs = Unown.parseInput(__filename, { splitter: Unown.TWO_LINES, parser: createPair });
 
     return pairs.map((pair, i) => checkOrder(pair[0], pair[1]) === 1 ? i + 1 : 0).reduce((a, b) => a + b);
 }

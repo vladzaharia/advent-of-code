@@ -4,7 +4,7 @@ export function main() {
     let total = 0;
     
     // Split on 2 empty lines
-    const fileParts = Unown.parseInput({ splitter: Unown.TWO_LINES });
+    const fileParts = Unown.parseInput(__filename, { splitter: Unown.TWO_LINES });
 
     const stackLines = fileParts[0].split(Unown.ONE_LINE).slice(0,-1);
     const stacks = parseStacks(stackLines);

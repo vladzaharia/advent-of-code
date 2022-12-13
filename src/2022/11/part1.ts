@@ -2,7 +2,7 @@ import { Missingno } from '../../util/missingno';
 import { Unown } from '../../util/unown';
 
 export function main() {
-    const monkeys = Unown.parseInput<string[]>({ 
+    const monkeys = Unown.parseInput<string[]>(__filename, { 
         splitter: [Unown.TWO_LINES, Unown.ONE_LINE], 
     }).map((monkeyLines) => createMonkey(monkeyLines));
 
