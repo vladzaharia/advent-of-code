@@ -44,20 +44,22 @@ export module Spectrier {
         const testFile = getTestForAdventFile(script);
     
         if (testFile) {
+            if (testFile.script.skip) {
+                return {
+                    script,
+                    status: true,
+                    text: `\x1b[1m\x1b[33mSKIPPED\x1b[0m`
+                };
+            }
+
             const result = await Exeggutor.executeScript(testFile.script, testFile.input);
             const expected = readFileSync(testFile.output, 'utf-8');
     
             const status = result == expected;
             let text = "";
 
-            if (result === undefined && testFile.script.skip) {
-                return {
-                    script,
-                    status: true,
-                    text: `\x1b[1m\x1b[33mSKIPPED\x1b[0m`
-                };
-            // == on purpose
-            } else if (result == expected) {
+            // == is on purpose
+            if (result == expected) {
                 text = `\x1b[1m\x1b[32mSUCCESS\x1b[0m => ${result} = ${expected}`
             } else {
                 text = `\x1b[1m\x1b[31mFAILED\x1b[0m => ${result} != ${expected}`
