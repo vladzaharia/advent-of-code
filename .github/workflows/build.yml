@@ -33,7 +33,7 @@ jobs:
           DAYS=(node --loader ts-node/esm.mjs --require ./src/_remove_warnings.cjs ./src/aoc.ts list -y ${{ matrix.aoc-year }})
           echo "days=${DAYS}" >> $GITHUB_OUTPUT
       - name: Echo output of generate-matrix
-        run: echo "${{ toJSON(generate-matrix.outputs) }}"
+        run: echo "${{ toJSON(steps.generate-matrix.outputs) }}"
 
   build:
     runs-on: ubuntu-latest
