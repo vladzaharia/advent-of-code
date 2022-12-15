@@ -25,7 +25,7 @@ export function main() {
             const others = sensors.filter((s) => s.sensor.i !== sensor.sensor.i && s.sensor.j !== sensor.sensor.j);
 
             for (let j = minJ; j <= maxJ; j++) {
-                if (sensors.every((s) => getDistance(s.sensor, { i, j }) > s.distance) && !sensors.some((s) => s.beacon.i === i && s.beacon.j === j)) {
+                if (!sensors.some((s) => getDistance(s.sensor, { i, j }) <= s.distance) && !sensors.some((s) => s.beacon.i === i && s.beacon.j === j)) {
 
                 // if (!others.every((s) => getDistance({i, j}, s.sensor) > s.distance)) {
                     Missingno.log(`No beacon at ${i},${j}`);
